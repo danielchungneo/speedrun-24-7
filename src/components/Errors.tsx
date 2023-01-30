@@ -19,7 +19,7 @@ const Errors = ({ defaultMessage, errors, ...blockProps }: any) => {
         radius={sizes.cardRadius}
         {...blockProps}
       >
-        <Text variant='danger' bold>
+        <Text variant="danger" bold>
           {error.message ||
             error.Message ||
             defaultMessage ||

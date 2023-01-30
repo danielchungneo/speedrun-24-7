@@ -97,6 +97,9 @@ export default () => {
     loginScreen: {
       headerShown: false,
     } as StackNavigationOptions,
+    runDashboardScreen: {
+      headerShown: false,
+    } as StackNavigationOptions,
     resetPasswordScreen: {
       headerShown: false,
     } as StackNavigationOptions,

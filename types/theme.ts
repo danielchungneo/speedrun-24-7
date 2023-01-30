@@ -268,6 +268,8 @@ export interface ThemeAssets {
   OpenSansSemiBold?: any;
   OpenSansExtraBold?: any;
   OpenSansBold?: any;
+  AudioWideRegular?: any;
+
 
   logo: ImageSourcePropType;
   header: ImageSourcePropType;

@@ -1,4 +1,10 @@
 const SCREENS = {
+
+  // App Screens
+  HOME: "Home" as never,
+  RUN_DASHBOARD: "RunDashboard" as never,
+
+
   /**
    * AUTH SCREENS
    */

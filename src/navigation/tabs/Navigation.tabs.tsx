@@ -11,6 +11,7 @@ import SCREENS from '@/constants/screens';
 import { useTabScreenOptions } from '@/utils/hooks/useScreenOptions';
 import useSession from '@/utils/hooks/context/useSession';
 import UITestingTabsNavigator from './UITesting.tabs';
+import AppNavigator from '../drawer/App.drawer';
 
 export default () => {
   const {
@@ -24,5 +25,6 @@ export default () => {
    */
   // return <UITestingTabsNavigator />;
 
-  return signedIn ? <MainNavigator /> : <AuthNavigator />;
+  // return signedIn ? <MainNavigator /> : <AuthNavigator />;
+  return <AppNavigator />;
 };

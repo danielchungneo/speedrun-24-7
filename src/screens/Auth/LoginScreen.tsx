@@ -25,6 +25,12 @@ import mcLogo from '@/assets/images/logo.png';
 import { REGEX_PATTERNS } from '@/constants/regex';
 import TextField from '@/components/Inputs_NEW/Text/TextField';
 
+import lightBackground from '@/assets/images/white-background.jpg';
+import darkBackground from '@/assets/images/dark-background.jpg';
+import { COLORS } from '@/constants/colors';
+import clockLogo from '@/assets/images/timer-logo.png';
+import { roundToNearestMinutes } from 'date-fns/esm';
+
 interface ILogin {
   email: string;
   password: string;
@@ -49,9 +55,6 @@ const LoginScreen = () => {
     email: '',
     password: '',
   });
-  const [customError, setCustomError] = useState<{ message: string } | null>(
-    null
-  );
 
   /**
    * HOOKS
@@ -69,16 +72,6 @@ const LoginScreen = () => {
   /**
    * FUNCTIONS
    */
-  const handleResetPassword = () => {
-    navigation.navigate(SCREENS.RESET_PASSWORD_REQUEST);
-  };
-
-  const handleChange = useCallback(
-    value => {
-      setLoginForm(state => ({ ...state, ...value }));
-    },
-    [setLoginForm]
-  );
 
   const checkForStoredUsername = async () => {
     let formUpdates = {
@@ -102,47 +95,27 @@ const LoginScreen = () => {
       formUpdates.password = storedPassword;
     }
 
-    setLoginForm(state => ({
+    setLoginForm((state) => ({
       ...state,
       ...formUpdates,
     }));
   };
 
-  const handleSignInSuccess = async (user: any) => {
-    await SecureStore.setItemAsync(USERNAME_STORAGE_KEY, loginForm.email);
-    // await SecureStore.setItemAsync(PASSWORD_STORAGE_KEY, loginForm.password);
+  console.log({ navigation });
 
-    await createSession(user);
+  const handleContinue = () => {
+    navigation.navigate(SCREENS.RUN_DASHBOARD);
   };
-
-  const handleSignIn = useCallback(async () => {
-    /** send/save registration data */
-
-    await submitForm?.(loginForm);
-
-    // if (data.token) {
-    //   authenticateWithToken(data.token);
-    // }
-  }, [loginForm]);
 
   const onBackgroundImageFinishedLoading = () => {
     setBackgroundImageLoaded(true);
   };
 
-  const {
-    data,
-    loading,
-    errors,
-    submitRequest: submitForm,
-  } = useRequest(api.auth.session.login(), {
-    onSuccess: handleSignInSuccess,
-  });
-
   /**
    * EFFECTS
    */
   useEffect(() => {
-    setIsValid(state => ({
+    setIsValid((state) => ({
       ...state,
       email: REGEX_PATTERNS.email.test(loginForm.email),
       password: !!loginForm.password,
@@ -157,15 +130,12 @@ const LoginScreen = () => {
 
   return (
     <>
-      <StatusBar style='light' />
+      <StatusBar style="light" />
 
       <Image
         background
-        resizeMode='cover'
-        source={{
-          uri: 'https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3000&q=80',
-          // 'https://images.unsplash.com/photo-1513760870-d12407065ae4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80',
-        }}
+        resizeMode="cover"
+        source={darkBackground}
         height={sizes.height}
         onLoad={onBackgroundImageFinishedLoading}
       >
@@ -185,91 +155,62 @@ const LoginScreen = () => {
               {/* login form */}
               <Block
                 flex={0}
-                marginHorizontal='4%'
+                marginHorizontal="4%"
                 // shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
                 radius={sizes.sm}
               >
                 <Block
+                  color={COLORS.DARK_BLUE}
                   flex={0}
-                  tint='light'
                   intensity={40}
                   blur
                   radius={sizes.cardRadius}
-                  overflow='hidden'
-                  justify='space-evenly'
+                  overflow="hidden"
+                  justify="space-evenly"
                   paddingVertical={sizes.l}
                   paddingHorizontal={sizes.m}
+                  align="center"
                 >
-                  <Block flex={0} row center>
+                  <Block
+                    flex={0}
+                    row
+                    center
+                    color="#C060A1"
+                    radius={10}
+                    width={100}
+                    marginBottom={15}
+                  >
                     <MultiTap
-                      onDoubleTap={() => setShowApiDetails(prev => !prev)}
+                      onDoubleTap={() => setShowApiDetails((prev) => !prev)}
                     >
                       <Image
                         background
-                        resizeMode='contain'
-                        source={mcLogo}
+                        resizeMode="contain"
+                        source={clockLogo}
                         width={190}
                         height={150}
                       />
                     </MultiTap>
                   </Block>
+                  <Block flex={0}>
+                    <Text color="white" font="AudioWide-Regular" size={35}>
+                      Speedrun 24-7
+                    </Text>
+                  </Block>
 
                   {/* form inputs */}
-                  <Block flex={0} marginTop={sizes.l}>
-                    <TextField
-                      form={false}
-                      value={loginForm.email}
-                      label={t('common.email')}
-                      // labelStyle={{ color: colors.white }}
-                      // color={colors.white}
-                      // textColor={colors.white}
-                      autoCapitalize='none'
-                      marginBottom={sizes.m}
-                      inputControlsContainerStyle={{
-                        borderColor: colors.white,
-                      }}
-                      keyboardType='email-address'
-                      placeholder={t('common.emailPlaceholder')}
-                      onChangeText={value => handleChange({ email: value })}
-                    />
-
-                    <TextField
-                      form={false}
-                      value={loginForm.password}
-                      secureTextEntry
-                      label={t('common.password')}
-                      autoCapitalize='none'
-                      marginBottom={sizes.m}
-                      placeholder={t('common.passwordPlaceholder')}
-                      onChangeText={value => handleChange({ password: value })}
-                    />
-                  </Block>
 
                   <Button
-                    onPress={handleSignIn}
+                    onPress={() => handleContinue()}
                     marginTop={sizes.sm}
                     marginBottom={sizes.s}
-                    variant='primary'
-                    disabled={loading || Object.values(isValid).includes(false)}
-                    loading={loading}
+                    // variant="success"
+                    color="#34c85b"
                   >
-                    <Text bold variant='white' transform='uppercase'>
-                      Continue
+                    <Text size={20} bold variant="white" transform="uppercase">
+                      Start Zooming
                     </Text>
                   </Button>
-
-                  <Errors
-                    errors={customError ? [customError] : errors}
-                    marginTop={sizes.sm}
-                  />
-
-                  <Block flex={0} marginTop={sizes.sm}>
-                    <Pressable onPress={handleResetPassword}>
-                      <Text bold marginLeft={sizes.xs} center>
-                        Forgot Password?
-                      </Text>
-                    </Pressable>
-                  </Block>
                 </Block>
               </Block>
             </Block>
@@ -278,15 +219,14 @@ const LoginScreen = () => {
               <Pressable onPress={() => setShowApiDetails(false)}>
                 <Block
                   flex={0}
-                  variant='white'
                   marginHorizontal={sizes.padding}
                   radius={sizes.cardRadius}
                   padding={sizes.padding}
                 >
-                  <Text size='p' center>
+                  <Text size="p" center>
                     API Endpoint:
                   </Text>
-                  <Text size='p' semibold center>
+                  <Text size="p" semibold center>
                     {DEFAULT_API_CONFIG.url}
                   </Text>
                 </Block>

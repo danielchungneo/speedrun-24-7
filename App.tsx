@@ -26,6 +26,7 @@ import * as Notifications from 'expo-notifications';
 import { Notification } from 'expo-notifications';
 import TokenProvider from '@/providers/TokenProvider';
 import UITestingTabsNavigator from '@/navigation/tabs/UITesting.tabs';
+import AppNavigator from '@/navigation/drawer/App.drawer';
 
 !!SENTRY_DSN &&
   Sentry.init({
@@ -77,9 +78,10 @@ const App: FunctionComponent = () => {
     'OpenSans-SemiBold': theme.assets.OpenSansSemiBold,
     'OpenSans-ExtraBold': theme.assets.OpenSansExtraBold,
     'OpenSans-Bold': theme.assets.OpenSansBold,
+    'AudioWide-Regular': theme.assets.AudioWideRegular,
   });
   const appIsReady = fontsLoaded && navigationReady;
-  const signedIn = !!user?.id;
+  const signedIn = true
 
   /**
    * COMPUTED
@@ -88,7 +90,7 @@ const App: FunctionComponent = () => {
   /**
    * FUNCTIONS
    */
-  const onUnhandledAction = event => {
+  const onUnhandledAction = (event) => {
     // console.warn(event);
   };
 
@@ -153,7 +155,7 @@ const App: FunctionComponent = () => {
     >
       <Block onLayout={onLayoutRootView}>
         {/* TODO: REMOVE_ME (remove whichever navigator is not needed and remove the import from above) */}
-        {VIEW_UI_TESTING_SCREEN ? (
+        {/* {VIEW_UI_TESTING_SCREEN ? (
           <UITestingTabsNavigator />
         ) : navigationType === 'tabs' ? (
           signedIn ? (
@@ -163,13 +165,14 @@ const App: FunctionComponent = () => {
           )
         ) : (
           <DrawerNavigation />
-        )}
+        )} */}
+        <AppNavigator />
       </Block>
     </NavigationContainer>
   );
 };
 
-export default function AppWithProviders () {
+export default function AppWithProviders() {
   return (
     <SafeAreaProvider>
       <SWRConfig
@@ -189,10 +192,10 @@ export default function AppWithProviders () {
       </SWRConfig>
 
       <Toast
-        ref={ref => Toast.setRef(ref)}
+        ref={(ref) => Toast.setRef(ref)}
         topOffset={40}
         bottomOffset={20}
-        position='bottom'
+        position="bottom"
       />
     </SafeAreaProvider>
   );

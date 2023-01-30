@@ -78,6 +78,7 @@ export const ASSETS: ThemeAssets = {
   OpenSansSemiBold: require('@/assets/fonts/OpenSans-SemiBold.ttf'),
   OpenSansExtraBold: require('@/assets/fonts/OpenSans-ExtraBold.ttf'),
   OpenSansBold: require('@/assets/fonts/OpenSans-Bold.ttf'),
+  Audiowide: require('@/assets/fonts/Audiowide-Regular.ttf'),
 
   // backgrounds/logo
   logo: require('@/assets/images/logo.png'),

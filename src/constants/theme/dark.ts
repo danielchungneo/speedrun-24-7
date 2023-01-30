@@ -38,7 +38,7 @@ const COLORS: ThemeColors = {
   /** UI color for #warning */
   warning: '#FFC107',
   /** UI color for #success */
-  success: '#82D616',
+  success: '#34c85b',
   /** UI color for #info */
   info: '#17C1E8',
 

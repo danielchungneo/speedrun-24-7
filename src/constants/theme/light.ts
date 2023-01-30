@@ -8,7 +8,7 @@ import {
 
 import { THEME as commonTheme } from './common';
 
-const SUCCESS = '#82D616';
+const SUCCESS = '#34c85b';
 const SECONDARY = '#8392AB';
 
 const COLORS: ThemeColors = {
