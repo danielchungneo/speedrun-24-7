@@ -13,11 +13,16 @@ import ActionBar from '@/components/Buttons/ActionBar';
 import CancelButton from '@/components/Buttons/CancelButton';
 import SaveButton from '@/components/Buttons/SaveButton';
 import { useRef } from 'react';
-import FormInput from '@/components/Inputs/Form/FormInput';
 import DeleteButton from '@/components/Buttons/DeleteButton';
 import Text from '@/components/Text';
 import Divider from '@/components/Divider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import TextField from '@/components/Inputs_NEW/Text/TextField';
+import NumberField from '@/components/Inputs_NEW/Text/NumberField';
+import SelectBox from '@/components/Inputs_NEW/Select/SelectBox';
+import Checkbox from '@/components/Inputs_NEW/Select/Checkbox';
+import Switch from '@/components/Inputs_NEW/Select/Switch';
+import DateTime from '@/components/Inputs_NEW/DateTime';
 
 /**
  *
@@ -217,7 +222,7 @@ type EntityTemplateFormProps = {
   title: string;
 };
 
-function EntityTemplateForm({
+function EntityTemplateForm ({
   activeObject: entity,
   defaultValues: defaultValuesProp,
   id,
@@ -271,7 +276,7 @@ function EntityTemplateForm({
     control,
   } = formMethods;
 
-  function onCancel() {
+  function onCancel () {
     if (onCancelProp) {
       onCancelProp();
     } else {
@@ -279,14 +284,14 @@ function EntityTemplateForm({
     }
   }
 
-  function onError(response: any) {
+  function onError (response: any) {
     Toast.show({
       type: 'error',
       text1: 'Failed to save changes.',
     });
   }
 
-  function onSubmit(values: any) {
+  function onSubmit (values: any) {
     if (values.failRequest) {
       values.id = 'fail';
     }
@@ -296,7 +301,7 @@ function EntityTemplateForm({
     // saveEntity?.(values);
   }
 
-  function onSuccess(response: any) {
+  function onSuccess (response: any) {
     if (onSuccessProp) {
       onSuccessProp(response);
     } else {
@@ -309,14 +314,14 @@ function EntityTemplateForm({
     });
   }
 
-  function onDeleteError(response: any) {
+  function onDeleteError (response: any) {
     Toast.show({
       type: 'error',
       text1: 'Failed to remove entity.',
     });
   }
 
-  function onDeleteSuccess(response: any) {
+  function onDeleteSuccess (response: any) {
     onCloseForm?.(true);
 
     Toast.show({
@@ -340,29 +345,28 @@ function EntityTemplateForm({
         ]}
       >
         <Block flex={0}>
-          <Text h5 bold warning marginTop={sizes.sm} center>
+          <Text size='h5' bold variant='warning' marginTop={sizes.sm} center>
             Warning: this screen will not actually create, update, or delete an
             entity. It is for demo purposes only.
           </Text>
 
           <Block flex={0} marginVertical={sizes.m}>
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Text
             </Text>
-            <FormInput
-              type="text"
-              label="Name"
+
+            <TextField
+              //
+              label='Name'
               name={ENTITY_TEMPLATE_FIELDS.NAME}
             />
-            <FormInput
-              type="text"
-              label="Prefilled Name"
+            <TextField
+              label='Prefilled Name'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_NAME}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="text"
-              label="Disabled Name"
+            <TextField
+              label='Disabled Name'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_NAME}
               marginTop={sizes.sm}
@@ -370,25 +374,25 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Textarea
             </Text>
 
-            <FormInput
-              type="textarea"
-              label="Desciption"
+            <TextField
+              type='textarea'
+              label='Desciption'
               name={ENTITY_TEMPLATE_FIELDS.DESCRIPTION}
             />
-            <FormInput
-              type="textarea"
+            <TextField
+              type='textarea'
               numberOfLines={5}
-              label="Prefilled Description"
+              label='Prefilled Description'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_DESCRIPTION}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="textarea"
-              label="Disabled Description"
+            <TextField
+              type='textarea'
+              label='Disabled Description'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_DESCRIPTION}
               marginTop={sizes.sm}
@@ -396,24 +400,24 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Password
             </Text>
 
-            <FormInput
-              type="password"
-              label="Password"
+            <TextField
+              type='password'
+              label='Password'
               name={ENTITY_TEMPLATE_FIELDS.PASSWORD}
             />
-            <FormInput
-              type="password"
-              label="Prefilled Password"
+            <TextField
+              type='password'
+              label='Prefilled Password'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_PASSWORD}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="password"
-              label="Disabled Password"
+            <TextField
+              type='password'
+              label='Disabled Password'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_PASSWORD}
               marginTop={sizes.sm}
@@ -421,24 +425,24 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Number
             </Text>
 
-            <FormInput
-              type="number"
-              label="Age"
+            <NumberField
+              type='number'
+              label='Age'
               name={ENTITY_TEMPLATE_FIELDS.AGE}
             />
-            <FormInput
-              type="number"
-              label="Prefilled Age"
+            <NumberField
+              type='number'
+              label='Prefilled Age'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_AGE}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="number"
-              label="Disabled Age"
+            <NumberField
+              type='number'
+              label='Disabled Age'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_AGE}
               marginTop={sizes.sm}
@@ -446,24 +450,24 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Decimal
             </Text>
 
-            <FormInput
-              type="decimal"
-              label="Price of gas"
+            <NumberField
+              decimalSeparator
+              label='Price of gas'
               name={ENTITY_TEMPLATE_FIELDS.PRICE_OF_GAS}
             />
-            <FormInput
-              type="decimal"
-              label="Prefilled Price of gas"
+            <NumberField
+              decimalSeparator
+              label='Prefilled Price of gas'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_PRICE_OF_GAS}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="decimal"
-              label="Disabled Price of gas"
+            <NumberField
+              decimalSeparator
+              label='Disabled Price of gas'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_PRICE_OF_GAS}
               marginTop={sizes.sm}
@@ -471,26 +475,23 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Select
             </Text>
 
-            <FormInput
-              type="select"
-              label="Role"
+            <SelectBox
+              label='Role'
               name={ENTITY_TEMPLATE_FIELDS.ROLE_ID}
               options={ROLE_OPTIONS}
             />
-            <FormInput
-              type="select"
-              label="Prefilled Role"
+            <SelectBox
+              label='Prefilled Role'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_ROLE_ID}
               options={ROLE_OPTIONS}
               marginTop={sizes.sm}
             />
-            <FormInput
-              type="select"
-              label="Disabled Role"
+            <SelectBox
+              label='Disabled Role'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_ROLE_ID}
               options={ROLE_OPTIONS}
@@ -499,77 +500,84 @@ function EntityTemplateForm({
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Checkbox
             </Text>
 
-            <FormInput
-              type="checkbox"
-              label="Owns Dog"
+            <Checkbox
+              //
+              label='Owns Dog'
               name={ENTITY_TEMPLATE_FIELDS.OWNS_DOG}
             />
-            <FormInput
-              type="checkbox"
-              label="Owns Cat"
+            <Checkbox
+              label='Owns Cat'
               name={ENTITY_TEMPLATE_FIELDS.OWNS_CAT}
-              marginTop={sizes.xs}
+              style={{
+                marginTop: sizes.xs,
+              }}
             />
 
-            <FormInput
-              type="checkbox"
-              label="Prefilled Owns Dog"
+            <Checkbox
+              label='Prefilled Owns Dog'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_OWNS_DOG}
-              marginTop={sizes.m}
+              style={{
+                marginTop: sizes.m,
+              }}
             />
-            <FormInput
-              type="checkbox"
-              label="Prefilled Owns Cat"
+            <Checkbox
+              label='Prefilled Owns Cat'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_OWNS_CAT}
-              marginTop={sizes.xs}
+              style={{
+                marginTop: sizes.xs,
+              }}
             />
 
-            <FormInput
-              type="checkbox"
-              label="Disabled Owns Dog"
+            <Checkbox
+              label='Disabled Owns Dog'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_OWNS_DOG}
-              marginTop={sizes.m}
+              style={{
+                marginTop: sizes.m,
+              }}
             />
-            <FormInput
-              type="checkbox"
-              label="Disabled Owns Cat"
+            <Checkbox
+              label='Disabled Owns Cat'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_OWNS_CAT}
-              marginTop={sizes.xs}
+              style={{
+                marginTop: sizes.xs,
+              }}
             />
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Switch
             </Text>
 
-            <FormInput
-              type="switch"
-              label="Ready to Golf"
+            <Switch
+              //
+              label='Ready to Golf'
               name={ENTITY_TEMPLATE_FIELDS.READY_TO_GOLF}
             />
-            <FormInput
-              type="switch"
-              label="Prefilled Ready to Golf"
+            <Switch
+              label='Prefilled Ready to Golf'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_READY_TO_GOLF}
-              marginTop={sizes.sm}
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
-            <FormInput
-              type="switch"
-              label="Disabled Ready to Golf"
+            <Switch
+              label='Disabled Ready to Golf'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_READY_TO_GOLF}
-              marginTop={sizes.sm}
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
 
             <Divider />
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Date
             </Text>
 
@@ -589,73 +597,87 @@ function EntityTemplateForm({
               name={ENTITY_TEMPLATE_FIELDS.NEXT_MEETING_DATETIME}
             /> */}
 
-            <FormInput
-              type="date"
-              label="Birthday"
+            <DateTime
+              //
+              label='Birthday'
               name={ENTITY_TEMPLATE_FIELDS.BIRTHDAY}
+              mode='date'
             />
-            <FormInput
-              type="date"
-              label="Prefilled Birthday"
+            <DateTime
+              label='Prefilled Birthday'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_BIRTHDAY}
-              marginTop={sizes.sm}
+              mode='date'
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
-            <FormInput
-              type="date"
-              label="Disabled Birthday"
+            <DateTime
+              label='Disabled Birthday'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_BIRTHDAY}
-              marginTop={sizes.sm}
+              mode='date'
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               Time
             </Text>
 
-            <FormInput
-              type="time"
-              label="Arrival at Work Time"
+            <DateTime
+              label='Arrival at Work Time'
               name={ENTITY_TEMPLATE_FIELDS.ARRIVAL_AT_WORK_TIME}
+              mode='time'
             />
-            <FormInput
-              type="time"
-              label="Prefilled Arrival at Work Time"
+            <DateTime
+              type='time'
+              label='Prefilled Arrival at Work Time'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_ARRIVAL_AT_WORK_TIME}
-              marginTop={sizes.sm}
+              mode='time'
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
-            <FormInput
-              type="time"
-              label="Disabled Arrival at Work Time"
+            <DateTime
+              label='Disabled Arrival at Work Time'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_ARRIVAL_AT_WORK_TIME}
-              marginTop={sizes.sm}
+              mode='time'
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
 
             <Divider />
 
-            <Text h4 bold danger>
+            <Text size='p' bold variant='danger'>
               DateTime
             </Text>
 
-            <FormInput
-              type="datetime"
-              label="Next Meeting Time"
+            <DateTime
+              mode='datetime'
+              label='Next Meeting Time'
               name={ENTITY_TEMPLATE_FIELDS.NEXT_MEETING_DATETIME}
             />
-            <FormInput
-              type="datetime"
-              label="Prefilled Next Meeting Time"
+            <DateTime
+              mode='datetime'
+              label='Prefilled Next Meeting Time'
               name={ENTITY_TEMPLATE_FIELDS.PREFILLED_NEXT_MEETING_DATETIME}
-              marginTop={sizes.sm}
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
-            <FormInput
-              type="datetime"
-              label="Disabled Next Meeting Time"
+            <DateTime
+              mode='datetime'
+              label='Disabled Next Meeting Time'
               disabled
               name={ENTITY_TEMPLATE_FIELDS.DISABLED_NEXT_MEETING_DATETIME}
-              marginTop={sizes.sm}
+              style={{
+                marginTop: sizes.sm,
+              }}
             />
           </Block>
 
@@ -670,7 +692,7 @@ function EntityTemplateForm({
           <DeleteButton
             id={id}
             disabled={loading || saving}
-            request={(id) => api.entities.customers.delete({ path: { id } })}
+            request={id => api.entities.customers.delete({ path: { id } })}
             onSuccess={onDeleteSuccess}
             onError={onDeleteError}
           />

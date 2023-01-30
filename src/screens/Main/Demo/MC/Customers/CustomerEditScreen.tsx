@@ -3,8 +3,8 @@ import useTheme from '@/utils/hooks/context/useTheme';
 import Block from '@/components/Block';
 import CustomerForm from '@/components/Entities/Demo/MC/Customer/CustomerForm';
 import { useNavigation } from '@react-navigation/native';
-import screens from '@/constants/screens';
 import { StatusBar } from 'expo-status-bar';
+import SCREENS from '@/constants/screens';
 
 const CustomerEditScreen = ({ route }) => {
   const { styles, colors, sizes } = useTheme();
@@ -13,15 +13,15 @@ const CustomerEditScreen = ({ route }) => {
   const customer = route?.params?.customer;
   const customerId = customer?.id || 'create';
 
-  function closeForm(refetch?: boolean) {
-    navigation.navigate(screens.MC_CUSTOMER_LIST, {
+  function closeForm (refetch?: boolean) {
+    navigation.navigate(SCREENS.MC_CUSTOMER_LIST, {
       refetch,
     });
   }
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style='light' />
 
       <Block>
         <Block paddingHorizontal={sizes.padding}>
@@ -29,7 +29,7 @@ const CustomerEditScreen = ({ route }) => {
             activeObject={customer}
             id={customerId}
             onCloseForm={closeForm}
-            title="Customer"
+            title='Customer'
           />
         </Block>
       </Block>

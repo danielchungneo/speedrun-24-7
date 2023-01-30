@@ -6,20 +6,16 @@ import useTranslation from '@/utils/hooks/context/useTranslation';
 import Text from '@/components/Text';
 import useTheme from '@/utils/hooks/context/useTheme';
 import Button from '@/components/Buttons/Button';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import GoBackButton from '@/components/Buttons/GoBackButton';
 import HeaderTitle from '@/components/Header/HeaderTitle';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import HeaderRightWrapper from '@/components/Header/HeaderRightWrapper';
 import ProfileButton from '@/components/Buttons/ProfileButton';
 import CreateButton from '@/components/Buttons/CreateButton';
-import { MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
 import HeaderLeftWrapper from '@/components/Header/HeaderLeftWrapper';
-import useApp from '../context/useApp';
-
-// TODO: REMOVE_ME
-import useDemo from '../context/useDemo';
 import TabBarIcon from '@/components/TabBarIcon';
+import useSession from '../context/useSession';
 
 export default () => {
   const { t } = useTranslation();
@@ -144,6 +140,13 @@ export default () => {
       headerShown: false,
     } as StackNavigationOptions,
 
+    /**
+     * TESTING
+     */
+    uiTestingHomeScreen: {
+      headerShown: false,
+    } as BottomTabNavigationOptions,
+
     // TODO: REMOVE_START
     entityTemplateTab: {
       headerShown: false,
@@ -156,8 +159,8 @@ export default () => {
       headerStyle: {
         backgroundColor: colors.primary,
       },
-      headerTitle: () => <HeaderTitle title="Entity" color={colors.white} />,
-      headerRight: () => <CreateButton route={screens.ENTITY_TEMPLATE_EDIT} />,
+      headerTitle: () => <HeaderTitle title='Entity' color={colors.white} />,
+      headerRight: () => <CreateButton route={SCREENS.ENTITY_TEMPLATE_EDIT} />,
     } as StackNavigationOptions,
 
     entityTemplateEditScreen: {
@@ -165,9 +168,9 @@ export default () => {
       headerStyle: {
         backgroundColor: colors.primary,
       },
-      headerLeft: () => <GoBackButton color={colors.white} title="Back" />,
+      headerLeft: () => <GoBackButton color={colors.white} title='Back' />,
       headerTitle: () => (
-        <HeaderTitle title="Edit Entity" color={colors.white} />
+        <HeaderTitle title='Edit Entity' color={colors.white} />
       ),
     } as StackNavigationOptions,
     // TODO: REMOVE_END
@@ -191,12 +194,12 @@ export default () => {
       headerLeft: () => {
         const {
           actions: { setNavigationType },
-        } = useApp();
+        } = useSession();
 
         return (
           <HeaderLeftWrapper>
             <Button onPress={() => setNavigationType('drawer')}>
-              <Text white>Switch to Drawer</Text>
+              <Text variant='white'>Switch to Drawer</Text>
             </Button>
           </HeaderLeftWrapper>
         );
@@ -223,8 +226,8 @@ export default () => {
         backgroundColor: colors.primary,
       },
       // headerLeft: () => <DrawerToggleButton color={colors.white} />,
-      headerTitle: () => <HeaderTitle title="Customers" color={colors.white} />,
-      headerRight: () => <CreateButton route={screens.MC_CUSTOMER_EDIT} />,
+      headerTitle: () => <HeaderTitle title='Customers' color={colors.white} />,
+      headerRight: () => <CreateButton route={SCREENS.MC_CUSTOMER_EDIT} />,
     } as StackNavigationOptions,
 
     mcCustomerEditScreen: {
@@ -232,67 +235,11 @@ export default () => {
       headerStyle: {
         backgroundColor: colors.primary,
       },
-      headerLeft: () => <GoBackButton color={colors.white} title="Back" />,
+      headerLeft: () => <GoBackButton color={colors.white} title='Back' />,
       headerTitle: () => (
-        <HeaderTitle title="Edit Customer" color={colors.white} />
+        <HeaderTitle title='Edit Customer' color={colors.white} />
       ),
     } as StackNavigationOptions,
-  };
-  // TODO: REMOVE_END
-
-  /**
-   *
-   *
-   *
-   *
-   *
-   * CT DEMO
-   * TODO: REMOVE_START
-   */
-  const { user, basket } = useDemo();
-  const ctAppDemoOptions = {
-    ctTab: {
-      headerShown: false,
-      tabBarLabel: 'CT Demo',
-      tabBarIcon: TabBarIcon({ name: 'ios-information-circle' }),
-    } as BottomTabNavigationOptions,
-
-    ctHomeScreen: {
-      tabBarLabel: 'Home',
-    } as MaterialTopTabNavigationOptions,
-    ctNotificationSettingsScreen: {
-      tabBarLabel: 'Notif. Settings',
-    } as MaterialTopTabNavigationOptions,
-    ctNotificationsScreen: {
-      tabBarLabel: 'Notifications',
-    } as MaterialTopTabNavigationOptions,
-    ctShoppingScreen: {
-      tabBarLabel: 'Shopping',
-    } as MaterialTopTabNavigationOptions,
-    ctComponentsScreen: {
-      tabBarLabel: 'Components',
-    } as MaterialTopTabNavigationOptions,
-    ctArticlesScreen: {
-      tabBarLabel: 'Articles',
-    } as MaterialTopTabNavigationOptions,
-    ctRentalsScreen: {
-      tabBarLabel: 'Rentals',
-    } as MaterialTopTabNavigationOptions,
-    ctRentalScreen: {
-      tabBarLabel: 'Rental',
-    } as MaterialTopTabNavigationOptions,
-    ctBookingScreen: {
-      tabBarLabel: 'Booking',
-    } as MaterialTopTabNavigationOptions,
-    ctChatScreen: {
-      tabBarLabel: 'Chat',
-    } as MaterialTopTabNavigationOptions,
-    ctProfileScreen: {
-      tabBarLabel: 'Profile',
-    } as MaterialTopTabNavigationOptions,
-    ctAutomotiveScreen: {
-      tabBarLabel: 'Automotive',
-    } as MaterialTopTabNavigationOptions,
   };
   // TODO: REMOVE_END
 
@@ -301,6 +248,5 @@ export default () => {
     ...authOptions,
     ...mainOptions,
     ...mcAppDemoOptions, // TODO: REMOVE_ME
-    ...ctAppDemoOptions, // TODO: REMOVE_ME
   };
 };

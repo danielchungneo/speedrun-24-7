@@ -1,150 +1,90 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, TextStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
-import { ITextProps } from '@/constants/types';
+import { ITextProps, ITheme } from 'types';
 import useTheme from '@/utils/hooks/context/useTheme';
 import { isWeb } from '@/constants/platform';
 import TextGradient from './TextGradient';
-import useApp from '@/utils/hooks/context/useApp';
+import useSession from '@/utils/hooks/context/useSession';
+import { IFontSizeVariant } from 'types/components/common';
 
-const Typography = (props: ITextProps) => {
+const getFontStyle = (theme: ITheme, fontSize: IFontSizeVariant) => {
+  return {
+    fontSize: theme.sizes[fontSize],
+    lineHeight: theme.lines[fontSize],
+    fontWeight: theme.weights[fontSize],
+    fontFamily: theme.fonts[fontSize],
+  };
+};
+
+const Typography = ({
+  id = 'Text',
+  children,
+  style,
+  center,
+  gradient,
+  color,
+  opacity,
+  variant,
+  size,
+  bold,
+  semibold,
+  weight,
+  font,
+  align,
+  transform,
+  lineHeight,
+  position,
+  right,
+  left,
+  top,
+  bottom,
+  start,
+  end,
+  marginBottom,
+  marginTop,
+  marginHorizontal,
+  marginVertical,
+  marginRight,
+  marginLeft,
+  paddingBottom,
+  paddingTop,
+  paddingHorizontal,
+  paddingVertical,
+  paddingRight,
+  paddingLeft,
+  ...rest
+}: ITextProps) => {
   const {
-    id = 'Text',
-    children,
-    style,
-    center,
-    gradient,
-    color,
-    opacity,
-    // predefined colors
-    primary,
-    secondary,
-    tertiary,
-    black,
-    white,
-    gray,
-    darkGray,
-    danger,
-    warning,
-    success,
-    info,
-    alternative,
-    size,
-    bold,
-    semibold,
-    weight,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    p,
-    font,
-    align,
-    transform,
-    lineHeight,
-    position,
-    right,
-    left,
-    top,
-    bottom,
-    start,
-    end,
-    marginBottom,
-    marginTop,
-    marginHorizontal,
-    marginVertical,
-    marginRight,
-    marginLeft,
-    paddingBottom,
-    paddingTop,
-    paddingHorizontal,
-    paddingVertical,
-    paddingRight,
-    paddingLeft,
-    ...rest
-  } = props;
-  const {
-    state: { altTheme },
-  } = useApp();
+    state: { theme, altTheme },
+  } = useSession();
   const { colors, sizes, lines, weights, fonts } = useTheme();
 
-  const colorIndex = primary
-    ? 'primary'
-    : secondary
-    ? 'secondary'
-    : tertiary
-    ? 'tertiary'
-    : black
-    ? 'black'
-    : white
-    ? 'white'
-    : gray
-    ? 'gray'
-    : darkGray
-    ? 'darkGray'
-    : danger
-    ? 'danger'
-    : warning
-    ? 'warning'
-    : success
-    ? 'success'
-    : info
-    ? 'info'
-    : null;
   const textColor = color
     ? color
-    : colorIndex
-    ? colors?.[colorIndex]
-    : alternative
-    ? altTheme.colors.text
+    : !!variant
+    ? variant === 'alternative'
+      ? altTheme.colors.text
+      : colors?.[variant]
     : undefined;
 
   const textStyles = StyleSheet.flatten([
     {
-      color: colors.text,
+      color: textColor || colors.text,
+
+      // @ts-ignore
       fontSize: sizes.text,
+      // @ts-ignore
       lineHeight: lines.text,
+      // @ts-ignore
       fontWeight: weights.text,
+      // @ts-ignore
       fontFamily: fonts.text,
-      ...(textColor && { color: textColor }),
-      ...(h1 && {
-        fontSize: sizes.h1,
-        lineHeight: lines.h1,
-        fontWeight: weights.h1,
-        fontFamily: fonts.h1,
-      }),
-      ...(h2 && {
-        fontSize: sizes.h2,
-        lineHeight: lines.h2,
-        fontWeight: weights.h2,
-        fontFamily: fonts.h2,
-      }),
-      ...(h3 && {
-        fontSize: sizes.h3,
-        lineHeight: lines.h3,
-        fontWeight: weights.h3,
-        fontFamily: fonts.h3,
-      }),
-      ...(h4 && {
-        fontSize: sizes.h4,
-        lineHeight: lines.h4,
-        fontWeight: weights.h4,
-        fontFamily: fonts.h4,
-      }),
-      ...(h5 && {
-        fontSize: sizes.h5,
-        lineHeight: lines.h5,
-        fontWeight: weights.h5,
-        fontFamily: fonts.h5,
-      }),
-      ...(p && {
-        fontSize: sizes.p,
-        lineHeight: lines.p,
-        fontWeight: weights.p,
-        fontFamily: fonts.p,
-      }),
+
+      ...(typeof size === 'string'
+        ? getFontStyle(theme, size as IFontSizeVariant)
+        : { fontSize: size || sizes.text }),
+
       ...(marginBottom && { marginBottom }),
       ...(marginTop && { marginTop }),
       ...(marginHorizontal && { marginHorizontal }),
@@ -164,7 +104,6 @@ const Typography = (props: ITextProps) => {
       ...(weight && { fontWeight: weight }),
       ...(transform && { textTransform: transform }),
       ...(font && { fontFamily: font }),
-      ...(size && ({ fontSize: size } as any)), // `as any` gets rid of the typescript error between string and number in the type defs
       ...(color && { color }),
       ...(opacity && { opacity }),
       ...(lineHeight && { lineHeight }),

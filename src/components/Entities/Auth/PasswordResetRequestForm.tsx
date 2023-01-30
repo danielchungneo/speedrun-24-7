@@ -2,8 +2,7 @@ import Block from '@/components/Block';
 import Button from '@/components/Buttons/Button';
 import GoBackButton from '@/components/Buttons/GoBackButton';
 import Errors from '@/components/Errors';
-import Image from '@/components/Image';
-import FormInput from '@/components/Inputs/Form/FormInput';
+import TextField from '@/components/Inputs_NEW/Text/TextField';
 import Text from '@/components/Text';
 import { isAndroid } from '@/constants/platform';
 import api from '@/utils/api';
@@ -14,7 +13,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Pressable } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
 
@@ -35,7 +33,7 @@ type PasswordResetRequestFormPropTypes = {
   loading?: boolean;
 };
 
-function PasswordResetRequestForm({
+function PasswordResetRequestForm ({
   revalidateCache,
   loading = false,
   title,
@@ -79,27 +77,27 @@ function PasswordResetRequestForm({
     control,
   } = formMethods;
 
-  function onCancel() {
+  function onCancel () {
     navigation.goBack();
   }
 
-  function onError(response: any) {
+  function onError (response: any) {
     Toast.show({
       type: 'error',
       text1: 'Failed to save changes.',
     });
   }
 
-  function onSubmit(values: any) {
+  function onSubmit (values: any) {
     setEmail(values.email);
     requestResetPassword(values);
   }
 
-  function handleBackToLogin() {
+  function handleBackToLogin () {
     navigation.goBack();
   }
 
-  function onSuccess(response: any) {
+  function onSuccess (response: any) {
     setEmailSent(true);
     revalidateCache?.();
     Toast.show({
@@ -113,38 +111,34 @@ function PasswordResetRequestForm({
       <Block flex={0} tint={colors.blurTint}>
         <GoBackButton />
 
-        <Block
-          flex={0}
-          // paddingHorizontal={sizes.sm}
-          marginTop={sizes.xl}
-        >
+        <Block flex={0} marginTop={sizes.xl}>
           {!emailSent ? (
             <FormProvider {...formMethods}>
               <Block flex={0} marginBottom={sizes.sm}>
-                <Text h4>{title}</Text>
-                <Text p semibold marginTop={sizes.s}>
+                <Text size='h4'>{title}</Text>
+                <Text size='p' semibold marginTop={sizes.s}>
                   Don't worry, we'll send you an email with instructions to
                   reset it.
                 </Text>
               </Block>
               <Block flex={0} marginVertical={sizes.sm}>
-                <FormInput
-                  label="Email Address"
-                  type="text"
+                <TextField
+                  label='Email Address'
+                  type='text'
                   name={PASSWORD_FORM_FIELDS.EMAIL}
                   maxLength={255}
-                  autocomplete="email"
+                  autocomplete='email'
                 />
               </Block>
               <Errors errors={requestingErrors} />
 
               <Block flex={0} marginTop={sizes.sm}>
                 <Button
-                  primary
+                  variant='primary'
                   disabled={loading || requesting}
                   onPress={handleSubmit(onSubmit)}
                 >
-                  <Text white>
+                  <Text variant='white'>
                     {requesting ? 'Sending Email...' : 'Send Email'}
                   </Text>
                 </Button>
@@ -153,19 +147,23 @@ function PasswordResetRequestForm({
           ) : (
             <React.Fragment>
               <Block flex={0}>
-                <Text h4>Email Sent</Text>
-                <Text p semibold marginTop={sizes.s}>
+                <Text size='h4'>Email Sent</Text>
+                <Text size='p' semibold marginTop={sizes.s}>
                   Instructions to reset your password have been sent to:{' '}
                 </Text>
 
-                <Text p bold marginTop={sizes.sm} marginBottom={sizes.l}>
+                <Text size='p' bold marginTop={sizes.sm} marginBottom={sizes.l}>
                   {email}
                 </Text>
               </Block>
 
               <Block flex={0} row>
-                <Button primary onPress={handleBackToLogin} width="100%">
-                  <Text bold marginLeft={sizes.xs} center white>
+                <Button
+                  variant='primary'
+                  onPress={handleBackToLogin}
+                  width='100%'
+                >
+                  <Text bold marginLeft={sizes.xs} center variant='white'>
                     Back to Login
                   </Text>
                 </Button>

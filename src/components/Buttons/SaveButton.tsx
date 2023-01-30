@@ -1,15 +1,16 @@
 import React from 'react';
 import { ActivityIndicator } from 'react-native';
+import { IButtonProps } from 'types';
 import Text from '../Text';
 import Button from './Button';
 
-const SaveButton = ({ saving, disabled, onPress }: any) => {
+const SaveButton = ({ saving, ...buttonProps }: IButtonProps) => {
   return (
-    <Button primary disabled={disabled} onPress={onPress}>
+    <Button variant='primary' {...buttonProps}>
       {saving ? (
         <ActivityIndicator color={'white'} size={'small'} />
       ) : (
-        <Text bold white>
+        <Text bold variant='white'>
           Save
         </Text>
       )}

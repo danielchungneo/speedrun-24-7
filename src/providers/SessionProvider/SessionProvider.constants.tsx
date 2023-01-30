@@ -1,6 +1,10 @@
+export const SESSION_READY = 'session/SESSION_READY';
+export const KEYBOARD_IS_OPEN = 'session/KEYBOARD_IS_OPEN';
 export const CREATE_SESSION = 'session/CREATE_SESSION';
 export const RESTORE_SESSION = 'session/RESTORE_SESSION';
 export const LOGOUT = 'session/LOGOUT';
-export const SET_NAVIGATION_REF = 'session/SET_NAVIGATION_REF';
-export const SET_NAVIGATION_READY = 'session/SET_NAVIGATION_READY';
-export const SET_CURRENT_ROUTE = 'session/SET_CURRENT_ROUTE';
+export const UPDATE_THEME = 'session/UPDATE_THEME';
+export const ON_NAVIGATION_READY = 'session/ON_NAVIGATION_READY';
+export const ON_NAVIGATION_STATE_CHANGE = 'session/ON_NAVIGATION_STATE_CHANGE';
+export const RESET_NAVIGATION_REF = 'session/RESET_NAVIGATION_REF';
+export const SET_NAVIGATION_TYPE = 'session/SET_NAVIGATION_TYPE';

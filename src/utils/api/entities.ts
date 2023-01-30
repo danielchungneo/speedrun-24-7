@@ -1,30 +1,40 @@
-import { generateCrudRoutes } from "@/utils/http";
+import {
+  ICustomersApi,
+  IEntitiesApi,
+  IProductsApi,
+  ISalesOrdersApi,
+  ISalesOrderStatusesApi,
+  ISalesOrderTypesApi,
+} from 'types/apis/entities';
+import { generateCrudRoutes } from '@/utils/http';
 
-const customers = {
-  ...generateCrudRoutes("customers"),
+// Plop Pattern: Append to Entities API const
+const customers: ICustomersApi = {
+  ...generateCrudRoutes('customers'),
 };
 
-const products = {
-  ...generateCrudRoutes("products"),
+const products: IProductsApi = {
+  ...generateCrudRoutes('products'),
 };
 
-const salesOrders = {
-  ...generateCrudRoutes("salesOrders"),
+const salesOrders: ISalesOrdersApi = {
+  ...generateCrudRoutes('salesOrders'),
 };
 
-const salesOrderLines = {
-  ...generateCrudRoutes("salesOrderLines"),
+const salesOrderLines: ISalesOrderStatusesApi = {
+  ...generateCrudRoutes('salesOrderLines'),
 };
 
-const salesOrderStatuses = {
-  ...generateCrudRoutes("salesOrderStatuses"),
+const salesOrderStatuses: ISalesOrderStatusesApi = {
+  ...generateCrudRoutes('salesOrderStatuses'),
 };
 
-const salesOrderTypes = {
-  ...generateCrudRoutes("salesOrderTypes"),
+const salesOrderTypes: ISalesOrderTypesApi = {
+  ...generateCrudRoutes('salesOrderTypes'),
 };
 
-const entities = {
+const entities: IEntitiesApi = {
+  // Plop Pattern: Append to Entities API Export
   customers,
   products,
   salesOrders,

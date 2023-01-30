@@ -6,7 +6,7 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
-import { IImageProps } from '@/constants/types';
+import { IImageProps } from 'types';
 
 import useTheme from '@/utils/hooks/context/useTheme';
 

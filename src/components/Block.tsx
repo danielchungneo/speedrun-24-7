@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
@@ -10,13 +11,14 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { IBlockProps } from '@/constants/types';
+import { IBlockProps } from 'types';
 import useTheme from '@/utils/hooks/context/useTheme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { isAndroid } from '@/constants/platform';
+import useSession from '@/utils/hooks/context/useSession';
 
-const Block = (props: IBlockProps, ref: any) => {
-  const {
+const Block = (
+  {
     id = 'Block',
     children,
     style,
@@ -28,20 +30,11 @@ const Block = (props: IBlockProps, ref: any) => {
     row,
     safe,
     keyboard,
+    keyboardView,
     scroll,
     color,
     gradient,
-    primary,
-    secondary,
-    tertiary,
-    black,
-    white,
-    gray,
-    darkGray,
-    danger,
-    warning,
-    success,
-    info,
+    variant,
     radius,
     height,
     width,
@@ -73,38 +66,23 @@ const Block = (props: IBlockProps, ref: any) => {
     bottom,
     end,
     start,
+    extraHeight = 0,
     ...rest
-  } = props;
-  const { colors, sizes } = useTheme();
+  }: IBlockProps,
+  ref: any
+) => {
+  const {
+    state: { altTheme },
+  } = useSession();
 
-  const colorIndex = primary
-    ? 'primary'
-    : secondary
-    ? 'secondary'
-    : tertiary
-    ? 'tertiary'
-    : black
-    ? 'black'
-    : white
-    ? 'white'
-    : gray
-    ? 'gray'
-    : darkGray
-    ? 'darkGray'
-    : danger
-    ? 'danger'
-    : warning
-    ? 'warning'
-    : success
-    ? 'success'
-    : info
-    ? 'info'
-    : null;
+  const { colors, sizes } = useTheme();
 
   const blockColor = color
     ? color
-    : colorIndex
-    ? colors?.[colorIndex]
+    : !!variant
+    ? variant === 'alternative'
+      ? altTheme.colors.background
+      : colors?.[variant]
     : undefined;
 
   const blockStyles = StyleSheet.flatten([
@@ -187,16 +165,30 @@ const Block = (props: IBlockProps, ref: any) => {
     return (
       <KeyboardAwareScrollView
         ref={ref}
-        behavior={isAndroid ? 'height' : 'padding'}
+        extraHeight={75 + extraHeight} // 75 is the default
         enableOnAndroid
-        // extraScrollHeight={20}
-        keyboardDismissMode="interactive"
+        keyboardDismissMode='interactive'
         {...blockID}
         {...rest}
         style={blockStyles}
       >
         {children}
       </KeyboardAwareScrollView>
+    );
+  }
+
+  if (keyboardView) {
+    return (
+      <KeyboardAvoidingView
+        ref={ref}
+        behavior={isAndroid ? 'height' : 'padding'}
+        keyboardDismissMode='interactive'
+        {...blockID}
+        {...rest}
+        style={blockStyles}
+      >
+        {children}
+      </KeyboardAvoidingView>
     );
   }
 

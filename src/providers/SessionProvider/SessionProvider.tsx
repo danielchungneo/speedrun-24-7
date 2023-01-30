@@ -1,233 +1,329 @@
-import useTheme from '@/utils/hooks/context/useTheme';
 import api from '@/utils/api';
 import useRequest from '@/utils/hooks/useRequest';
 import React, {
   createContext,
   FunctionComponent,
+  useCallback,
   useEffect,
   useReducer,
   useRef,
+  useState,
 } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import {
-  createSession,
-  logout,
-  restoreSession,
-  setCurrentRoute,
-  setNavigationReady,
-} from './SessionProvider.actions';
 import SessionProviderReducer from './SessionProvider.reducer';
-import { useContext } from 'react';
-import { CommonActions } from '@react-navigation/native';
-import screens from '@/constants/screens';
-import useApp from '@/utils/hooks/context/useApp';
+import { ITheme } from 'types';
+import Storage from '@react-native-async-storage/async-storage';
+import { removeSessionToken } from '@/utils/session';
+import { getActiveRoute } from '@/utils/navigation';
+import { Keyboard } from 'react-native';
+import {
+  CREATE_SESSION,
+  KEYBOARD_IS_OPEN,
+  LOGOUT,
+  ON_NAVIGATION_READY,
+  ON_NAVIGATION_STATE_CHANGE,
+  RESET_NAVIGATION_REF,
+  RESTORE_SESSION,
+  SET_NAVIGATION_TYPE,
+  UPDATE_THEME,
+} from './SessionProvider.constants';
+import { USER_SET_DARK_MODE } from '@/constants/config';
+import useToken from '@/utils/hooks/context/useToken';
+import { LIGHT_THEME } from '@/constants/theme/light';
+import { DARK_THEME } from '@/constants/theme/dark';
 
 interface ISessionActions {
   createSession: (data: any) => void;
   restoreSession: (data: any) => void;
   logout: () => void;
+
+  onNavigationReady: () => void;
+  onNavigationStateChange: () => void;
+  resetNavigationRef: () => void;
+  updateTheme: (isDark: boolean) => void;
+  setNavigationType: (navType: ISessionState['navigationType']) => void;
 }
 
 interface ISessionState {
   user: any;
-  shouldShowLoadingOverlay: boolean;
+  token: string | undefined;
+  navigationReady: boolean;
+  currentRoute: any;
+  currentStack: any;
+  isDark: boolean;
+  theme: ITheme;
+  altTheme: ITheme;
+  keyboardIsOpen: boolean;
+  navigationType: 'tabs' | 'drawer';
+}
+
+interface ISessionRefs {
+  navigationRef: React.Ref<any>;
 }
 
 export interface ISessionContext {
   state: ISessionState;
   actions: ISessionActions;
+  refs: ISessionRefs;
 }
 
 export const SessionContext = createContext<ISessionContext>({} as any);
 
 const initialState: any = {
-  shouldShowLoadingOverlay: true,
-  user: {},
+  user: null,
+  token: null,
+  navigationReady: false,
+  currentRoute: null,
+  currentStack: null,
+  isDark: false,
+  theme: LIGHT_THEME,
+  altTheme: DARK_THEME,
+  keyboardIsOpen: false,
+  navigationType: 'tabs',
 };
 
-const SessionProvider: FunctionComponent = ({ children }) => {
-  /**
-   * REDUCERS
-   */
+const SessionProvider: FunctionComponent = ({
+  children,
+  initialToken,
+}: any) => {
+  // #region STATE
+  const [initializationComplete, setInitializationComplete] =
+    useState<boolean>(false);
+  const [sessionReady, setSessionReady] = useState(false);
+
+  // #endregion
+
+  // #region HOOKS
   const [state, dispatch]: [ISessionState, any] = useReducer(
     SessionProviderReducer,
     initialState
   );
+  const navigationRef = useRef();
 
-  /**
-   * HOOKS
-   */
   const {
     data: userData,
     errors: userErrors,
     loading,
     submitRequest,
-  } = useRequest(api.auth.session.get()); // Check for an existing session
-
-  const { styles, colors } = useTheme();
+  } = useRequest(api.auth.session.get(), {
+    swr: false,
+    onSuccess: onFetchMeSuccess,
+    onError: onFetchMeError,
+    onComplete: onFetchMeComplete,
+  });
   const {
-    state: { navigationReady, currentStack },
-    actions: { setToken, removeToken },
-    refs: { navigationRef },
-  } = useApp();
+    actions: { updateToken },
+  } = useToken();
+  //  #endregion
 
-  /**
-   * STATE
-   */
-  //
+  // #region FUNCTIONS
+  const createSession: ISessionActions['createSession'] = useCallback(
+    async data => {
+      const newToken = data.token;
 
-  /**
-   * REFS
-   */
-
-  /**
-   * COMPUTED
-   */
-
-  const isUserSessionValid = Boolean(userData?.id);
-  const userSessionExists = state.user?.id;
-  const inAuthStack = currentStack === screens.AUTH_STACK;
-  const shouldShowLoadingOverlay =
-    (!userSessionExists && loading) ||
-    (!isUserSessionValid && !loading && !inAuthStack) ||
-    ((isUserSessionValid || userSessionExists) && inAuthStack);
-
-  // console.log(
-  //   '------------------------------------------------\n\nSessionProvider: render'
-  // );
-
-  // console.log({
-  //   navigationReady,
-  //   isUserSessionValid,
-  //   userSessionExists,
-  //   inAuthStack,
-  //   shouldShowLoadingOverlay,
-  //   userErrors,
-  //   userData,
-  //   // state,
-  //   loading,
-  //   currentStack,
-  // });
-
-  // console.log('\n------------------------------------------------');
-
-  const actions: ISessionActions = {
-    createSession: (data: any) => {
-      !!data.token && setToken(data.token);
-      dispatch(createSession(data));
-    },
-    restoreSession: (data: any) => {
-      !!data.token && setToken(data.token);
-      dispatch(restoreSession(data));
-    },
-    logout: () => {
-      removeToken();
-      dispatch(logout());
-    },
-  };
-
-  /**
-   * FUNCTIONS
-   */
-  function checkUserSession() {
-    if (!navigationReady) {
-      return;
-    }
-
-    const sessionNotValidWhileInsideApp =
-      (userErrors.length || !isUserSessionValid) && !loading && !inAuthStack;
-
-    // console.log({
-    //   navigationReady,
-    //   isUserSessionValid,
-    //   userSessionExists,
-    //   inAuthStack,
-    //   shouldShowLoadingOverlay,
-    //   userErrors,
-    //   userData,
-    //   loading,
-    //   sessionNotValidWhileInsideApp,
-    // });
-
-    // If the session isn't valid, redirect to login
-    if (sessionNotValidWhileInsideApp) {
-      actions.logout();
-
-      const resetAction = CommonActions.reset({
-        index: 0,
-        routes: [{ name: screens.AUTH_STACK }],
-      });
-
-      navigationRef.current?.dispatch?.(resetAction);
-
-      return;
-    }
-
-    // If there is a valid user session, restore the session
-    if (isUserSessionValid) {
-      actions.restoreSession(userData);
-
-      // If there is a valid session and user is on login page, redirect to home
-      if (inAuthStack) {
-        const resetAction = CommonActions.reset({
-          index: 0,
-          routes: [{ name: screens.MAIN_STACK }],
+      if (newToken) {
+        console.log({
+          newToken: newToken.slice(-5),
         });
 
-        navigationRef.current?.dispatch?.(resetAction);
-        return;
+        updateToken(newToken);
       }
-    }
-    // else {
-    //   console.log('SessionProvider: redirecting to login');
 
-    //   const resetAction = CommonActions.reset({
-    //     index: 0,
-    //     routes: [{ name: screens.AUTH_STACK }],
-    //   });
+      dispatch({
+        type: CREATE_SESSION,
+        data,
+      });
+    },
+    []
+  );
 
-    //   navigationRef.current?.dispatch?.(resetAction);
-    //   return;
-    // }
+  const restoreSession: ISessionActions['restoreSession'] = useCallback(
+    async data => {
+      const newToken = data.token;
+
+      if (newToken) {
+        updateToken(newToken);
+      }
+
+      dispatch({
+        type: RESTORE_SESSION,
+        data,
+      });
+    },
+    []
+  );
+
+  const logout: ISessionActions['logout'] = useCallback(async () => {
+    await removeSessionToken();
+    dispatch({
+      type: LOGOUT,
+    });
+  }, []);
+
+  const onNavigationReady: ISessionActions['onNavigationReady'] =
+    useCallback(async () => {
+      const { currentRoute, currentStack } = getCurrentRouteAndStack();
+
+      dispatch({
+        type: ON_NAVIGATION_READY,
+        currentRoute,
+        currentStack,
+      });
+    }, []);
+
+  const resetNavigationRef: ISessionActions['resetNavigationRef'] =
+    useCallback(async () => {
+      const { currentRoute, currentStack } = getCurrentRouteAndStack();
+
+      navigationRef.current = null;
+
+      dispatch({
+        type: RESET_NAVIGATION_REF,
+        currentRoute,
+        currentStack,
+      });
+    }, []);
+
+  const onNavigationStateChange: ISessionActions['onNavigationStateChange'] =
+    useCallback(async () => {
+      const { currentRoute, currentStack } = getCurrentRouteAndStack();
+
+      dispatch({
+        type: ON_NAVIGATION_STATE_CHANGE,
+        currentRoute,
+        currentStack,
+      });
+    }, []);
+
+  const updateTheme: ISessionActions['updateTheme'] = useCallback(
+    async isDark => {
+      await Storage.setItem(USER_SET_DARK_MODE, JSON.stringify(isDark));
+
+      dispatch({
+        type: UPDATE_THEME,
+        isDark,
+      });
+    },
+    []
+  );
+
+  const setNavigationType: ISessionActions['setNavigationType'] = useCallback(
+    async navigationType => {
+      dispatch({
+        type: SET_NAVIGATION_TYPE,
+        navigationType,
+      });
+    },
+    []
+  );
+
+  const updateKeyboardState = useCallback(async (keyboardIsOpen: boolean) => {
+    dispatch({
+      type: KEYBOARD_IS_OPEN,
+      keyboardIsOpen,
+    });
+  }, []);
+
+  async function initializeSession () {
+    const isDarkValue = await Storage.getItem(USER_SET_DARK_MODE);
+    updateTheme(isDarkValue === 'true');
+
+    setInitializationComplete(true);
   }
 
-  /**
-   * EFFECTS
-   */
+  function getCurrentRouteAndStack (): { currentRoute: any; currentStack: any } {
+    const rootState = navigationRef.current?.getRootState?.();
+    const newStack =
+      state.navigationType === 'tabs'
+        ? rootState.routes[rootState.index]?.name
+        : rootState.routeNames[rootState.index];
+
+    // const newRoute = navigationRef.current.getCurrentRoute()
+    const newRoute = getActiveRoute(rootState);
+    // const previousRoute = getPreviousRoute({ state: rootState });
+
+    return {
+      currentRoute: newRoute,
+      currentStack: newStack,
+    };
+  }
+
+  async function onFetchMeSuccess (user: any) {
+    createSession(user);
+  }
+
+  async function onFetchMeError (error: any) {
+    //
+    console.log('onFetchMeError', error);
+  }
+
+  async function onFetchMeComplete () {
+    setSessionReady(true);
+  }
+
+  // #endregion
+
+  // #region COMPUTED
+  const actions: ISessionActions = {
+    createSession,
+    restoreSession,
+    logout,
+    onNavigationReady,
+    onNavigationStateChange,
+    resetNavigationRef,
+    updateTheme,
+    setNavigationType,
+  };
+  const refs: ISessionRefs = {
+    navigationRef,
+  };
+  // #endregion
+
+  // #region EFFECTS
   useEffect(() => {
-    checkUserSession();
-  }, [isUserSessionValid, userErrors.length, loading, navigationReady]);
+    if (!initializationComplete || sessionReady) {
+      return;
+    }
+
+    if (state.token) {
+      submitRequest?.();
+    } else {
+      setSessionReady(true);
+    }
+  }, [state.token, initializationComplete]);
+
+  useEffect(() => {
+    initializeSession();
+  }, []);
+
+  // watch for keyboard changes
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      updateKeyboardState(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      updateKeyboardState(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  // #endregion
+
+  if (!sessionReady) {
+    return null;
+  }
 
   return (
     <SessionContext.Provider
       value={{
         state,
         actions,
+        refs,
       }}
     >
       {children}
-
-      {/* must use condition rendering; 
-          can't use `display: none` and `position: absolute` together:
-          LINK: https://github.com/facebook/react-native/issues/18415
-      */}
-      {shouldShowLoadingOverlay && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: colors.background,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator size="large" />
-        </View>
-      )}
     </SessionContext.Provider>
   );
 };

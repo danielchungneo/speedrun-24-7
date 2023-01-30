@@ -1,10 +1,10 @@
-import { ITheme } from '@/constants/types';
-import useApp from '@/utils/hooks/context/useApp';
+import { ITheme } from 'types';
+import useSession from './useSession';
 
-export default function useTheme() {
+export default function useTheme () {
   const {
     state: { theme },
-  } = useApp();
+  } = useSession();
 
   return theme as ITheme;
 }

@@ -6,7 +6,7 @@ import Button from '@/components/Buttons/Button';
 import AnimatedLottieView from 'lottie-react-native';
 import { Assets } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
@@ -33,7 +33,7 @@ const LandingScreen = ({ route }) => {
   const insets = useSafeAreaInsets();
 
   const handleGoToDashboard = () => {
-    navigation.navigate(screens.MC_DASHBOARD);
+    navigation.navigate(SCREENS.MC_DASHBOARD);
   };
 
   return (
@@ -46,9 +46,9 @@ const LandingScreen = ({ route }) => {
         paddingHorizontal={sizes.padding}
       >
         <Block>
-          <Block flex={0} row justify="center" align="center">
+          <Block flex={0} row justify='center' align='center'>
             <AnimatedLottieView
-              ref={(ref) => {
+              ref={ref => {
                 ref?.play();
               }}
               style={{
@@ -62,20 +62,20 @@ const LandingScreen = ({ route }) => {
           </Block>
 
           <Block flex={0}>
-            <Text h5 bold center marginTop={sizes.padding}>
+            <Text size='h5' bold center marginTop={sizes.padding}>
               Let us build your next mobile app, web app, web site, or cloud
               infrastructure and grow your business
             </Text>
           </Block>
 
           <Block flex={0} marginTop={sizes.xl}>
-            <Text h5>
+            <Text size='h5'>
               Our team of engineers specialize in the following
               languages/frameworks:
             </Text>
           </Block>
 
-          <Block flex={0} row wrap="wrap">
+          <Block flex={0} row wrap='wrap'>
             {devTeamKnownLanguages.map((lang, langIndex) => {
               const isFirstInRow = langIndex % 2 === 0;
 
@@ -83,8 +83,8 @@ const LandingScreen = ({ route }) => {
                 <Block
                   key={lang}
                   flex={0}
-                  width="50%"
-                  align="center"
+                  width='50%'
+                  align='center'
                   justify={'flex-start'}
                   marginTop={sizes.s}
                   style={{
@@ -93,7 +93,7 @@ const LandingScreen = ({ route }) => {
                 >
                   <Block
                     flex={0}
-                    secondary
+                    variant='secondary'
                     width={10}
                     height={10}
                     radius={10}
@@ -119,8 +119,12 @@ const LandingScreen = ({ route }) => {
 
           <Block />
 
-          <Button success marginTop={sizes.l} onPress={handleGoToDashboard}>
-            <Text p white bold>
+          <Button
+            variant='success'
+            marginTop={sizes.l}
+            onPress={handleGoToDashboard}
+          >
+            <Text size='p' variant='white' bold>
               Let's Go!
             </Text>
           </Button>

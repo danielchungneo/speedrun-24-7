@@ -1,5 +1,5 @@
 import useRequest from '@/utils/hooks/useRequest';
-import { IAction } from '@/constants/types';
+import { IAction } from 'types';
 import React, { useState } from 'react';
 import Button from './Button';
 import Text from '../Text';
@@ -21,7 +21,7 @@ type DeleteButtonProps = {
   children?: any;
 };
 
-function DeleteButton({
+function DeleteButton ({
   id,
   buttonText,
   disabled,
@@ -44,24 +44,24 @@ function DeleteButton({
     onError: onDeleteError,
   });
 
-  function onClickDelete() {
+  function onClickDelete () {
     setShowConfirmDelete(true);
   }
 
-  function onCancel() {
+  function onCancel () {
     setShowConfirmDelete(false);
   }
 
-  function onConfirm() {
+  function onConfirm () {
     submitRequest?.();
   }
 
-  function onDeleteError(response: any) {
+  function onDeleteError (response: any) {
     setShowConfirmDelete(false);
     onError?.(response);
   }
 
-  function onDeleteSuccess(response: any) {
+  function onDeleteSuccess (response: any) {
     setShowConfirmDelete(false);
     onSuccess?.(response);
   }
@@ -70,11 +70,11 @@ function DeleteButton({
     <>
       <Button
         flex={0}
-        danger
+        variant='danger'
         disabled={disabled || deleting}
         onPress={onClickDelete}
       >
-        <Text bold white>
+        <Text bold variant='white'>
           {icon || buttonText || 'Delete'}
         </Text>
       </Button>
@@ -84,35 +84,35 @@ function DeleteButton({
         // onClose={() => setShowConfirmDelete(false)}
         hideCloseButton
         contentColor={isAndroid ? undefined : 'transparent'}
-        backdropColor="rgba(0,0,0,0.5)"
+        backdropColor='rgba(0,0,0,0.5)'
       >
         <Block flex={0} marginTop={sizes.m}>
-          <Text white={!isAndroid} black={isAndroid} center h4>
+          <Text variant={isAndroid ? 'black' : 'white'} center size='h4'>
             Confirm deletion
           </Text>
 
           <Block flex={0} row marginTop={sizes.xl}>
             <Button
-              black
+              variant='black'
               disabled={disabled || deleting}
               onPress={onCancel}
               flex={1}
             >
-              <Text bold white>
+              <Text bold variant='white'>
                 Cancel
               </Text>
             </Button>
             <Block flex={0} width={sizes.sm} />
             <Button
-              danger
+              variant='danger'
               disabled={disabled || deleting}
               onPress={onConfirm}
               flex={1}
             >
               {deleting ? (
-                <ActivityIndicator color="white" size="small" />
+                <ActivityIndicator color='white' size='small' />
               ) : (
-                <Text bold white>
+                <Text bold variant='white'>
                   Confirm
                 </Text>
               )}

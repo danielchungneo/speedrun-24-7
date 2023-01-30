@@ -72,7 +72,12 @@ const GoBackButton = ({
       />
 
       {!!routeName && (
-        <Text p color={mainColor} marginLeft={sizes.s} onPress={handlePress}>
+        <Text
+          size='p'
+          color={mainColor}
+          marginLeft={sizes.s}
+          onPress={handlePress}
+        >
           {routeName}
         </Text>
       )}

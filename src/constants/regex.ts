@@ -2,12 +2,12 @@
  * name validation
  * accepted: letters & spaces, minimum 3 chars, maximum 15 chars
  */
-export const name: RegExp = /[a-zA-Z\ ]{3,15}/;
+const name: RegExp = /[a-zA-Z\ ]{3,15}/;
 
 /*
  * email validation
  */
-export const email: RegExp = /^[^\s@]+@[^\s@]+\.([^\s@]{2,})+$/;
+const email: RegExp = /^[^\s@]+@[^\s@]+\.([^\s@]{2,})+$/;
 
 /*
  * password validation, should contain:
@@ -17,20 +17,27 @@ export const email: RegExp = /^[^\s@]+@[^\s@]+\.([^\s@]{2,})+$/;
  * (?=.*[!]): at least one special character (TODO.babyjay: add more special characters)
  * [0-9a-zA-Z]{6,}: at least 6 from the mentioned characters
  */
-export const password: RegExp =
+const password: RegExp =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!])[0-9a-zA-Z!]{6,}$/;
 
 /*
  * number parsing
  */
-export const number: RegExp = /\d+/;
-export const decimal: RegExp = /\d+\.?\d*/g;
+const number: RegExp = /\d+/;
+const decimal: RegExp = /\d+\.?\d*/g;
 
 /*
  * formatting
  */
-export const FORMATTING = {
-  commas: /\B(?=(\d{3})+(?!\d))/g,
-} as {
-  commas: RegExp;
+const commas = /\B(?=(\d{3})+(?!\d))/g;
+
+export const REGEX_PATTERNS = {
+  name,
+  email,
+  password,
+  //
+  number,
+  decimal,
+  //
+  commas,
 };

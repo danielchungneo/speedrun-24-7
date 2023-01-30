@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
-import { IEnvironment } from '@/constants/types';
+import { IEnvironment } from 'types';
 
 const getEnvironment = (): IEnvironment => {
   let releaseChannel =

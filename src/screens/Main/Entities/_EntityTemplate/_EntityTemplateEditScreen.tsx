@@ -2,7 +2,7 @@ import React from 'react';
 import useTheme from '@/utils/hooks/context/useTheme';
 import Block from '@/components/Block';
 import { useNavigation } from '@react-navigation/native';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import { StatusBar } from 'expo-status-bar';
 import EntityTemplateForm from '@/components/Entities/_ENTITY_TEMPLATE/EntityTemplateForm';
 
@@ -14,7 +14,7 @@ const _EntityTemplateEditScreen = ({ route }) => {
   const entityId = entity?.id || 'create';
 
   function closeForm(refetch?: boolean) {
-    navigation.navigate(screens.ENTITY_TEMPLATE_LIST, {
+    navigation.navigate(SCREENS.ENTITY_TEMPLATE_LIST, {
       refetch,
     });
   }

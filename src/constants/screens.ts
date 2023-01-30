@@ -1,56 +1,44 @@
-export default {
+const SCREENS = {
   /**
    * AUTH SCREENS
    */
-  AUTH_STACK: 'AuthStack',
-  LOGIN: 'Login',
-  REGISTER: 'Register',
-  RESET_PASSWORD: 'ResetPassword',
-  RESET_PASSWORD_REQUEST: 'ResetPasswordRequest',
+  AUTH_STACK: 'AuthStack' as never,
+  LOGIN: 'Login' as never,
+  REGISTER: 'Register' as never,
+  RESET_PASSWORD: 'ResetPassword' as never,
+  RESET_PASSWORD_REQUEST: 'ResetPasswordRequest' as never,
 
   /**
    * MAIN SCREENS (used in most projects)
    */
-  MAIN_STACK: 'MainStack',
-  MAIN_TABS: 'MainTabs',
+  MAIN_STACK: 'MainStack' as never,
+  MAIN_TABS: 'MainTabs' as never,
   //
-  SETTINGS_TAB: 'SettingsTab',
-  SETTINGS: 'Settings',
-  ABOUT: 'About',
-  PRIVACY: 'Privacy',
-  AGREEMENT: 'Agreement',
-  PROFILE: 'Profile',
-  LANDING: 'Landing',
+  SETTINGS_TAB: 'SettingsTab' as never,
+  SETTINGS: 'Settings' as never,
+  ABOUT: 'About' as never,
+  PRIVACY: 'Privacy' as never,
+  AGREEMENT: 'Agreement' as never,
+  PROFILE: 'Profile' as never,
+  LANDING: 'Landing' as never,
 
-  ENTITY_TEMPLATE_TAB: 'EntityTemplateTab',
-  ENTITY_TEMPLATE_LIST: 'EntityTemplateList',
-  ENTITY_TEMPLATE_EDIT: 'EntityTemplateEdit',
+  ENTITY_TEMPLATE_TAB: 'EntityTemplateTab' as never,
+  ENTITY_TEMPLATE_LIST: 'EntityTemplateList' as never,
+  ENTITY_TEMPLATE_EDIT: 'EntityTemplateEdit' as never,
 
   /**
    * MC-APP DEMO SCREENS: REMOVE_ME
    */
-  MC_DASHBOARD: 'Dashboard',
+  MC_DASHBOARD: 'Dashboard' as never,
   //
-  MC_CUSTOMER_TAB: 'CustomerTab',
-  MC_CUSTOMER_LIST: 'CustomersList',
-  MC_CUSTOMER_EDIT: 'CustomerEdit',
+  MC_CUSTOMER_TAB: 'CustomerTab' as never,
+  MC_CUSTOMER_LIST: 'CustomersList' as never,
+  MC_CUSTOMER_EDIT: 'CustomerEdit' as never,
 
   /**
-   * CREATIVE TIM (CT) SCREENS: REMOVE_ME
+   * UI Testing (my own playground .. kinda like Storybook but for React Native)
    */
-  CT_STACK: 'DemoStack',
-  CT_TABS: 'DemoTabs',
-  //
-  CT_HOME: 'DemoHome',
-  CT_COMPONENTS: 'DemoComponents',
-  CT_ARTICLES: 'DemoArticles',
-  CT_RENTALS: 'DemoRentals',
-  CT_RENTAL: 'DemoRental',
-  CT_PROFILE: 'DemoProfile',
-  CT_BOOKING: 'DemoBooking',
-  CT_CHAT: 'DemoChat',
-  CT_NOTIFICATIONS: 'DemoNotifications',
-  CT_NOTIFICATION_SETTINGS: 'DemoNotificationSettings',
-  CT_AUTOMOTIVE: 'DemoAutomotive',
-  CT_SHOPPING: 'DemoShopping',
+  UI_TESTING_HOME: 'UiTestingHome' as never,
 };
+
+export default SCREENS;

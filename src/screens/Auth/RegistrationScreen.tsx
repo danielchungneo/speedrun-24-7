@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Linking, Platform, Pressable } from 'react-native';
+import { Linking, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useTheme from '@/utils/hooks/context/useTheme';
 import useTranslation from '@/utils/hooks/context/useTranslation';
-import * as regex from '@/constants/regex';
 import Block from '@/components/Block';
 import Text from '@/components/Text';
 import Image from '@/components/Image';
-import Checkbox from '@/components/Inputs/Base/Checkbox';
 import Button from '@/components/Buttons/Button';
-import screens from '@/constants/screens';
-import useApp from '@/utils/hooks/context/useApp';
+import SCREENS from '@/constants/screens';
 import { StatusBar } from 'expo-status-bar';
-import TextField from '@/components/Inputs/Base/TextField';
 import { isAndroid } from '@/constants/platform';
+import { REGEX_PATTERNS } from '@/constants/regex';
+import useSession from '@/utils/hooks/context/useSession';
+import TextField from '@/components/Inputs_NEW/Text/TextField';
+import Checkbox from '@/components/Inputs_NEW/Select/Checkbox';
 
 interface IRegistration {
   name: string;
@@ -31,7 +31,7 @@ interface IRegistrationValidation {
 const RegistrationScreen = () => {
   const {
     state: { isDark },
-  } = useApp();
+  } = useSession();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [isValid, setIsValid] = useState<IRegistrationValidation>({
@@ -49,8 +49,8 @@ const RegistrationScreen = () => {
   const { assets, colors, gradients, sizes } = useTheme();
 
   const handleChange = useCallback(
-    (value) => {
-      setRegistration((state) => ({ ...state, ...value }));
+    value => {
+      setRegistration(state => ({ ...state, ...value }));
     },
     [setRegistration]
   );
@@ -63,11 +63,11 @@ const RegistrationScreen = () => {
   }, [isValid, registration]);
 
   useEffect(() => {
-    setIsValid((state) => ({
+    setIsValid(state => ({
       ...state,
-      name: regex.name.test(registration.name),
-      email: regex.email.test(registration.email),
-      password: regex.password.test(registration.password),
+      name: REGEX_PATTERNS.name.test(registration.name),
+      email: REGEX_PATTERNS.email.test(registration.email),
+      password: REGEX_PATTERNS.password.test(registration.password),
       agreed: registration.agreed,
     }));
   }, [registration, setIsValid]);
@@ -81,7 +81,7 @@ const RegistrationScreen = () => {
           <Block flex={0} style={{ zIndex: 0 }}>
             <Image
               background
-              resizeMode="cover"
+              resizeMode='cover'
               padding={sizes.sm}
               radius={sizes.cardRadius}
               source={assets.background}
@@ -90,7 +90,7 @@ const RegistrationScreen = () => {
               <Button
                 row
                 flex={0}
-                justify="flex-start"
+                justify='flex-start'
                 onPress={() => navigation.goBack()}
               >
                 <Image
@@ -101,23 +101,23 @@ const RegistrationScreen = () => {
                   source={assets.arrow}
                   transform={[{ rotate: '180deg' }]}
                 />
-                <Text p white marginLeft={sizes.s}>
+                <Text size='p' variant='white' marginLeft={sizes.s}>
                   {t('common.goBack')}
                 </Text>
               </Button>
 
-              <Text h4 center white marginBottom={sizes.md}>
+              <Text size='h4' center variant='white' marginBottom={sizes.md}>
                 {t('register.title')}
               </Text>
             </Image>
           </Block>
-          
+
           {/* register form */}
           <Block marginTop={-(sizes.height * 0.2 - sizes.l)}>
             <Block
               flex={0}
               radius={sizes.sm}
-              marginHorizontal="4%"
+              marginHorizontal='4%'
               shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
             >
               <Block
@@ -125,22 +125,22 @@ const RegistrationScreen = () => {
                 flex={0}
                 intensity={90}
                 radius={sizes.sm}
-                overflow="hidden"
-                justify="space-evenly"
+                overflow='hidden'
+                justify='space-evenly'
                 tint={colors.blurTint}
                 paddingVertical={sizes.sm}
               >
-                <Text p semibold center>
+                <Text size='p' semibold center>
                   {t('register.subtitle')}
                 </Text>
                 {/* social buttons */}
                 <Block
                   row
                   center
-                  justify="space-evenly"
+                  justify='space-evenly'
                   marginVertical={sizes.m}
                 >
-                  <Button outlined gray shadow={!isAndroid}>
+                  <Button outlined variant='neutral' shadow={!isAndroid}>
                     <Image
                       source={assets.facebook}
                       height={sizes.m}
@@ -148,7 +148,7 @@ const RegistrationScreen = () => {
                       color={isDark ? colors.icon : undefined}
                     />
                   </Button>
-                  <Button outlined gray shadow={!isAndroid}>
+                  <Button outlined variant='neutral' shadow={!isAndroid}>
                     <Image
                       source={assets.apple}
                       height={sizes.m}
@@ -156,7 +156,7 @@ const RegistrationScreen = () => {
                       color={isDark ? colors.icon : undefined}
                     />
                   </Button>
-                  <Button outlined gray shadow={!isAndroid}>
+                  <Button outlined variant='neutral' shadow={!isAndroid}>
                     <Image
                       source={assets.google}
                       height={sizes.m}
@@ -168,15 +168,15 @@ const RegistrationScreen = () => {
                 <Block
                   row
                   flex={0}
-                  align="center"
-                  justify="center"
+                  align='center'
+                  justify='center'
                   marginBottom={sizes.sm}
                   paddingHorizontal={sizes.xxl}
                 >
                   <Block
                     flex={0}
                     height={1}
-                    width="50%"
+                    width='50%'
                     start={[0, 1]}
                     end={[1, 0]}
                     gradient={gradients.divider}
@@ -187,7 +187,7 @@ const RegistrationScreen = () => {
                   <Block
                     flex={0}
                     height={1}
-                    width="50%"
+                    width='50%'
                     start={[1, 0]}
                     end={[0, 1]}
                     gradient={gradients.divider}
@@ -196,54 +196,78 @@ const RegistrationScreen = () => {
                 {/* form inputs */}
                 <Block paddingHorizontal={sizes.sm}>
                   <TextField
-                    autoCapitalize="none"
+                    form={false}
+                    autoCapitalize='none'
                     marginBottom={sizes.m}
                     label={t('common.name')}
                     placeholder={t('common.namePlaceholder')}
-                    success={Boolean(registration.name && isValid.name)}
-                    danger={Boolean(registration.name && !isValid.name)}
-                    onChangeText={(value) => handleChange({ name: value })}
+                    variant={
+                      Boolean(registration.name && isValid.name)
+                        ? 'success'
+                        : Boolean(registration.name && !isValid.name)
+                        ? 'danger'
+                        : undefined
+                    }
+                    onChangeText={value => handleChange({ name: value })}
                   />
                   <TextField
-                    autoCapitalize="none"
+                    form={false}
+                    autoCapitalize='none'
                     marginBottom={sizes.m}
                     label={t('common.email')}
-                    keyboardType="email-address"
+                    keyboardType='email-address'
                     placeholder={t('common.emailPlaceholder')}
-                    success={Boolean(registration.email && isValid.email)}
-                    danger={Boolean(registration.email && !isValid.email)}
-                    onChangeText={(value) => handleChange({ email: value })}
+                    variant={
+                      Boolean(registration.email && isValid.email)
+                        ? 'success'
+                        : Boolean(registration.email && !isValid.email)
+                        ? 'danger'
+                        : undefined
+                    }
+                    onChangeText={value => handleChange({ email: value })}
                   />
                   <TextField
+                    form={false}
                     secureTextEntry
-                    autoCapitalize="none"
+                    autoCapitalize='none'
                     marginBottom={sizes.m}
                     label={t('common.password')}
                     placeholder={t('common.passwordPlaceholder')}
-                    onChangeText={(value) => handleChange({ password: value })}
-                    success={Boolean(registration.password && isValid.password)}
-                    danger={Boolean(registration.password && !isValid.password)}
+                    onChangeText={value => handleChange({ password: value })}
+                    variant={
+                      Boolean(registration.password && isValid.password)
+                        ? 'success'
+                        : Boolean(registration.password && !isValid.password)
+                        ? 'danger'
+                        : undefined
+                    }
                   />
                 </Block>
                 {/* checkbox terms */}
-                <Block row flex={0} align="center" paddingHorizontal={sizes.sm}>
+                <Block row flex={0} align='center' paddingHorizontal={sizes.sm}>
                   <Checkbox
+                    form={false}
                     marginRight={sizes.sm}
-                    checked={registration?.agreed}
-                    onPress={(value) => handleChange({ agreed: value })}
+                    value={registration?.agreed}
+                    onChange={evt => {
+                      handleChange({ agreed: evt.target.checked });
+                    }}
+                    label={
+                      <Text paddingRight={sizes.s}>
+                        {t('common.agree')}
+                        <Text
+                          semibold
+                          onPress={() => {
+                            Linking.openURL('https://morelandconnect.com');
+                          }}
+                        >
+                          {t('common.terms')}
+                        </Text>
+                      </Text>
+                    }
                   />
-                  <Text paddingRight={sizes.s}>
-                    {t('common.agree')}
-                    <Text
-                      semibold
-                      onPress={() => {
-                        Linking.openURL('https://morelandconnect.com');
-                      }}
-                    >
-                      {t('common.terms')}
-                    </Text>
-                  </Text>
                 </Block>
+
                 <Button
                   onPress={handleSignUp}
                   marginVertical={sizes.s}
@@ -251,7 +275,7 @@ const RegistrationScreen = () => {
                   gradient={gradients.primary}
                   disabled={Object.values(isValid).includes(false)}
                 >
-                  <Text bold white transform="uppercase">
+                  <Text bold variant='white' transform='uppercase'>
                     {t('common.signup')}
                   </Text>
                 </Button>
@@ -270,18 +294,17 @@ const RegistrationScreen = () => {
                 </Text>
               </Button> */}
 
-                <Block row justify="center" align="center">
+                <Block row justify='center' align='center'>
                   <Text center size={12} paddingRight={sizes.s}>
                     Already have an account?{' '}
                   </Text>
-                  <Pressable onPress={() => navigation.navigate(screens.LOGIN)}>
+                  <Pressable onPress={() => navigation.navigate(SCREENS.LOGIN)}>
                     <Text
-                      h5
                       bold
                       size={13}
                       marginLeft={sizes.xs}
-                      transform="uppercase"
-                      primary
+                      transform='uppercase'
+                      variant='primary'
                       style={{
                         textDecorationLine: 'underline',
                       }}

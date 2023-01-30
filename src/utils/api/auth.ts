@@ -1,53 +1,66 @@
-import { HTTP_REQUEST_METHODS } from "@/constants/http";
-import { IBuildUrlOptions } from "@/constants/types";
-import { generateCrudRoutes } from "@/utils/http";
+import { HTTP_REQUEST_METHODS } from '@/constants/http';
+import { IBuildUrlOptions } from 'types';
+import {
+  IAuthApi,
+  IRolesApi,
+  ISessionApi,
+  IUsersApi,
+} from 'types/apis/auth';
+import { generateCrudRoutes } from '@/utils/http';
 
-const session = {
+const session: ISessionApi = {
   get: (options?: IBuildUrlOptions) => {
     return {
-      url: "/auth/session/me",
+      url: '/auth/session/me', // change back to /auth/session/login when backend is ready
       method: HTTP_REQUEST_METHODS.GET,
       options,
     };
   },
   login: (options?: IBuildUrlOptions) => {
     return {
-      url: "/auth/session/login",
+      url: '/auth/session/login', // change back to /auth/session/login when backend is ready
       method: HTTP_REQUEST_METHODS.POST,
       options,
     };
   },
 };
 
-const roles = {
+const roles: IRolesApi = {
   getAll: (options?: IBuildUrlOptions) => {
     return {
-      url: "/auth/roles",
+      url: '/auth/roles',
       method: HTTP_REQUEST_METHODS.GET,
       options,
     };
   },
 };
 
-const users = {
-  ...generateCrudRoutes("auth/users"),
+const users: IUsersApi = {
+  ...generateCrudRoutes('auth/users'),
   resetPasswordRequest: (options?: IBuildUrlOptions) => {
     return {
-      url: "/auth/users/requestResetPassword",
+      url: '/auth/users/requestResetPassword',
       method: HTTP_REQUEST_METHODS.POST,
       options,
     };
   },
   resetPassword: (options?: IBuildUrlOptions) => {
     return {
-      url: "/auth/users/resetPassword/:token",
+      url: '/auth/users/resetPassword/:token',
+      method: HTTP_REQUEST_METHODS.POST,
+      options,
+    };
+  },
+  register: (options?: IBuildUrlOptions) => {
+    return {
+      url: '/auth/users/register',
       method: HTTP_REQUEST_METHODS.POST,
       options,
     };
   },
 };
 
-const auth = {
+const auth: IAuthApi = {
   roles,
   session,
   users,

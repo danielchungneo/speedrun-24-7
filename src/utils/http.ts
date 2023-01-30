@@ -5,7 +5,7 @@ import {
   IAction,
   IApiResponse,
   IBuildUrlOptions,
-} from '@/constants/types';
+} from 'types';
 import { getSessionToken } from './session';
 
 export const fetcherWithToken = async (url: string, token: string) =>

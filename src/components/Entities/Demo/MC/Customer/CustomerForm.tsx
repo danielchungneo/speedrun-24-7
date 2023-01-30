@@ -13,9 +13,10 @@ import ActionBar from '@/components/Buttons/ActionBar';
 import CancelButton from '@/components/Buttons/CancelButton';
 import SaveButton from '@/components/Buttons/SaveButton';
 import { useRef } from 'react';
-import useApp from '@/utils/hooks/context/useApp';
-import FormInput from '@/components/Inputs/Form/FormInput';
 import DeleteButton from '@/components/Buttons/DeleteButton';
+import useSession from '@/utils/hooks/context/useSession';
+import TextField from '@/components/Inputs_NEW/Text/TextField';
+import Switch from '@/components/Inputs_NEW/Select/Switch';
 
 // Field definitions
 export const CUSTOMER_FORM_FIELDS = {
@@ -43,7 +44,7 @@ type CustomerFormProps = {
   title: string;
 };
 
-function CustomerForm({
+function CustomerForm ({
   activeObject: customer,
   defaultValues: defaultValuesProp,
   id,
@@ -57,7 +58,7 @@ function CustomerForm({
   const { styles, assets, colors, fonts, gradients, sizes } = useTheme();
   const {
     state: { navigationType },
-  } = useApp();
+  } = useSession();
   const defaultValues = defaultValuesProp || {};
 
   /**
@@ -97,7 +98,7 @@ function CustomerForm({
     control,
   } = formMethods;
 
-  function onCancel() {
+  function onCancel () {
     if (onCancelProp) {
       onCancelProp();
     } else {
@@ -105,14 +106,14 @@ function CustomerForm({
     }
   }
 
-  function onError(response: any) {
+  function onError (response: any) {
     Toast.show({
       type: 'error',
       text1: 'Failed to save changes.',
     });
   }
 
-  function onSubmit(values: any) {
+  function onSubmit (values: any) {
     if (values.failRequest) {
       values.id = 'fail';
     }
@@ -120,7 +121,7 @@ function CustomerForm({
     saveCustomer?.(values);
   }
 
-  function onSuccess(response: any) {
+  function onSuccess (response: any) {
     if (onSuccessProp) {
       onSuccessProp(response);
     } else {
@@ -133,14 +134,14 @@ function CustomerForm({
     });
   }
 
-  function onDeleteError(response: any) {
+  function onDeleteError (response: any) {
     Toast.show({
       type: 'error',
       text1: 'Failed to remove customer.',
     });
   }
 
-  function onDeleteSuccess(response: any) {
+  function onDeleteSuccess (response: any) {
     onCloseForm?.(true);
 
     Toast.show({
@@ -165,32 +166,33 @@ function CustomerForm({
             ]}
           >
             <Block marginVertical={sizes.m}>
-              <FormInput
-                type="text"
-                label="Name"
+              <TextField
+                //
+                label='Name'
                 name={CUSTOMER_FORM_FIELDS.NAME}
               />
 
-              <FormInput
-                type="text"
-                label="Description"
+              <TextField
+                //
+                label='Description'
                 name={CUSTOMER_FORM_FIELDS.DESCRIPTION}
                 marginTop={sizes.m}
               />
 
-              <FormInput
-                type="switch"
-                label="DEV: fail request?"
+              <Switch
+                label='DEV: fail request?'
                 name={CUSTOMER_FORM_FIELDS.FAIL_REQUEST}
-                marginTop={sizes.m}
+                style={{
+                  marginTop: sizes.m,
+                }}
               />
 
               {false &&
                 [...new Array(10)].map((_, index) => (
-                  <FormInput
+                  <TextField
                     key={`mock_input${index}`}
-                    type="text"
-                    label="Description"
+                    type='text'
+                    label='Description'
                     name={CUSTOMER_FORM_FIELDS.DESCRIPTION}
                     marginTop={sizes.m}
                   />
@@ -209,7 +211,7 @@ function CustomerForm({
           <DeleteButton
             id={id}
             disabled={loading || saving}
-            request={(id) => api.entities.customers.delete({ path: { id } })}
+            request={id => api.entities.customers.delete({ path: { id } })}
             onSuccess={onDeleteSuccess}
             onError={onDeleteError}
           />

@@ -5,19 +5,24 @@ import useRequest from '@/utils/hooks/useRequest';
 import { Feather } from '@expo/vector-icons';
 import { Pressable, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Switch from '@/components/Inputs/Base/Switch';
-import useApp from '@/utils/hooks/context/useApp';
-import Select from '@/components/Inputs/Base/Select';
 import Block from '@/components/Block';
 import Text from '@/components/Text';
+import { IFilterParams, ISortParams } from 'types';
+import useSession from '@/utils/hooks/context/useSession';
+import SelectBox from '@/components/Inputs_NEW/Select/SelectBox';
+import Switch from '@/components/Inputs_NEW/Select/Switch';
 
-const sortOptions = [
+const sortOptions: {
+  value: number;
+  label: string;
+  params: ISortParams[];
+}[] = [
   {
     label: 'None',
-    params: [],
+    params: [] as ISortParams[],
   },
   {
     label: 'Name A-Z',
@@ -26,7 +31,7 @@ const sortOptions = [
         field: 'name',
         direction: 'asc',
       },
-    ],
+    ] as ISortParams[],
   },
   {
     label: 'Name Z-A',
@@ -35,14 +40,17 @@ const sortOptions = [
         field: 'name',
         direction: 'desc',
       },
-    ],
+    ] as ISortParams[],
   },
 ].map((option, index) => ({ ...option, value: index }));
 
-const filterOptions = [
+const filterOptions: {
+  label: string;
+  params: IFilterParams[];
+}[] = [
   {
     label: 'None',
-    params: [],
+    params: [] as IFilterParams[],
   },
   {
     label: '"Bob" in name',
@@ -52,7 +60,7 @@ const filterOptions = [
         value: 'Bob',
         opperand: 'contains',
       },
-    ],
+    ] as IFilterParams[],
   },
 ].map((option, index) => ({ ...option, value: index }));
 
@@ -69,7 +77,7 @@ const CustomersList = () => {
   const { styles, assets, colors, fonts, gradients, sizes } = useTheme();
   const {
     state: { navigationType },
-  } = useApp();
+  } = useSession();
 
   const isUsingTabs = navigationType === 'tabs';
 
@@ -86,13 +94,11 @@ const CustomersList = () => {
     api.entities.customers.getAll({
       query: {
         sort: sortOptions[selectedSortOptionIndex].params,
-        filter: filterOptions[selectedFilterOptionIndex].params,
+        // sort: sortOptions[selectedSortOptionIndex].params,
+        // filter: filterOptions[selectedFilterOptionIndex].params,
       },
     })
   );
-
-  console.log(customers?.results);
-  
 
   /**
    * COMPUTED
@@ -108,9 +114,9 @@ const CustomersList = () => {
   /**
    * FUNCTIONS
    */
-  function openEditScreen(customer: any) {
+  function openEditScreen (customer: any) {
     return () => {
-      navigation.navigate(screens.MC_CUSTOMER_EDIT, {
+      navigation.navigate(SCREENS.MC_CUSTOMER_EDIT, {
         customer,
       });
     };
@@ -120,7 +126,7 @@ const CustomersList = () => {
     return (
       <Block
         flex={0}
-        white={isUsingTabs}
+        variant={isUsingTabs ? 'white' : undefined}
         style={{
           borderTopWidth: 2,
           borderTopColor: colors.secondary,
@@ -141,10 +147,11 @@ const CustomersList = () => {
           paddingTop={sizes.sm}
         >
           <Block>
-            <Select
-              label="Sort"
-              labelField="label"
-              valueField="value"
+            <SelectBox
+              form={false}
+              label='Sort'
+              labelField='label'
+              valueField='value'
               options={sortOptions}
               value={sortOptions[selectedSortOptionIndex].value}
               onChange={(value, item, index) =>
@@ -156,10 +163,11 @@ const CustomersList = () => {
           <Block flex={0} width={sizes.s} />
 
           <Block>
-            <Select
-              label="Filter"
-              labelField="label"
-              valueField="value"
+            <SelectBox
+              form={false}
+              label='Filter'
+              labelField='label'
+              valueField='value'
               options={filterOptions}
               value={filterOptions[selectedFilterOptionIndex].value}
               onChange={(value, item, index) =>
@@ -172,47 +180,49 @@ const CustomersList = () => {
         <Block
           flex={0}
           row
-          justify="space-between"
+          justify='space-between'
           marginTop={sizes.sm}
           padding={sizes.padding}
         >
           <Switch
-            label="Show as cards"
-            labelPosition="left"
-            checked={showListAsCards}
-            onPress={setShowListAsCards}
+            form={false}
+            label='Show as cards'
+            labelPosition='left'
+            value={showListAsCards}
+            onChange={e => setShowListAsCards(e.target.value)}
           />
 
           <Switch
-            label="Duplicate data"
-            labelPosition="left"
-            checked={duplicateData}
-            onPress={setDuplicateData}
+            form={false}
+            label='Duplicate data'
+            labelPosition='left'
+            value={duplicateData}
+            onChange={e => setDuplicateData(e.target.value)}
           />
         </Block>
       </Block>
     );
   };
 
-  function renderCustomer({ item: customer, index, separators }, ...rest) {
+  function renderCustomer ({ item: customer, index, separators }, ...rest) {
     const isLast = index === flatlistData.length - 1;
 
     const content = (
       <>
         <Block>
-          <Text h5 bold>
+          <Text size='h5' bold>
             {customer.name}
           </Text>
-          <Text p secondary marginTop={sizes.xs}>
+          <Text size='p' variant='secondary' marginTop={sizes.xs}>
             {customer.description}
           </Text>
-          <Text p secondary marginTop={sizes.xs}>
-            SOs: {customer.salesOrder.length}
+          <Text size='p' variant='secondary' marginTop={sizes.xs}>
+            SOs: {customer.salesOrder?.length}
           </Text>
         </Block>
 
-        <Block flex={0} justify="center" align="center">
-          <Feather name="chevron-right" size={sizes.h4} />
+        <Block flex={0} justify='center' align='center'>
+          <Feather name='chevron-right' size={sizes.h4} />
         </Block>
       </>
     );
@@ -267,11 +277,11 @@ const CustomersList = () => {
       <FlatList
         data={flatlistData}
         ListEmptyComponent={
-          <Block align="center" marginTop={sizes.m}>
-            <Text h4 secondary>
+          <Block align='center' marginTop={sizes.m}>
+            <Text size='h4' variant='secondary'>
               No customers found
             </Text>
-            <Text secondary>(pull down to refresh)</Text>
+            <Text variant='secondary'>(pull down to refresh)</Text>
           </Block>
         }
         keyExtractor={(item, index) => `${index}:${item.id}`}

@@ -8,11 +8,10 @@ import Image from '@/components/Image';
 import Button from '@/components/Buttons/Button';
 import { Ionicons } from '@expo/vector-icons';
 import useSession from '@/utils/hooks/context/useSession';
-import screens from '@/constants/screens';
-import useApp from '@/utils/hooks/context/useApp';
+import SCREENS from '@/constants/screens';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import Switch from '@/components/Inputs/Base/Switch';
+import Switch from '@/components/Inputs_NEW/Select/Switch';
 
 const SettingsScreen = () => {
   const [useFaceId, setUseFaceId] = useState<boolean>(true);
@@ -20,8 +19,8 @@ const SettingsScreen = () => {
   const navigation = useNavigation();
   const {
     state: { isDark, navigationType },
-    actions: { handleIsDark, setNavigationType },
-  } = useApp();
+    actions: { updateTheme, setNavigationType },
+  } = useSession();
   const { t, locale, setLocale } = useTranslation();
   const { assets, colors, gradients, sizes } = useTheme();
   const {
@@ -52,12 +51,17 @@ const SettingsScreen = () => {
         contentContainerStyle={{ paddingBottom: sizes.xxl }}
       >
         <Block flex={0} marginBottom={sizes.m}>
-          <Button onPress={handleLogout} row primary>
-            <Text bold white transform="uppercase" marginRight={sizes.sm}>
+          <Button onPress={handleLogout} row variant='primary'>
+            <Text
+              bold
+              variant='white'
+              transform='uppercase'
+              marginRight={sizes.sm}
+            >
               Sign out
             </Text>
-            <Text white>
-              <Ionicons name="log-out-outline" size={sizes.m} />
+            <Text variant='white'>
+              <Ionicons name='log-out-outline' size={sizes.m} />
             </Text>
           </Button>
 
@@ -66,24 +70,29 @@ const SettingsScreen = () => {
             onPress={toggleNavigationType}
             marginTop={sizes.sm}
             row
-            primary
+            variant='primary'
           >
-            <Text bold white transform="uppercase" marginRight={sizes.sm}>
+            <Text
+              bold
+              variant='white'
+              transform='uppercase'
+              marginRight={sizes.sm}
+            >
               Switch to {navigationType === 'drawer' ? 'tabs' : 'drawer'}
             </Text>
-            <Text white>
-              <Ionicons name="menu" size={sizes.m} />
+            <Text variant='white'>
+              <Ionicons name='menu' size={sizes.m} />
             </Text>
           </Button>
         </Block>
 
         {/* settings */}
         <Block card padding={sizes.sm} marginBottom={sizes.sm}>
-          <Block row align="center" marginBottom={sizes.m}>
+          <Block row align='center' marginBottom={sizes.m}>
             <Block
               flex={0}
-              align="center"
-              justify="center"
+              align='center'
+              justify='center'
               radius={sizes.s}
               width={sizes.md}
               height={sizes.md}
@@ -105,47 +114,53 @@ const SettingsScreen = () => {
 
           <Block
             row
-            align="center"
-            justify="space-between"
+            align='center'
+            justify='space-between'
             marginBottom={sizes.sm}
           >
             <Text>{t('settings.recommended.darkmode')}</Text>
             <Switch
-              checked={isDark}
-              onPress={(checked) => handleIsDark(checked)}
+              form={false}
+              value={isDark}
+              onChange={e => updateTheme(e.target.value)}
             />
           </Block>
 
           <Block
             row
-            align="center"
-            justify="space-between"
+            align='center'
+            justify='space-between'
             marginBottom={sizes.sm}
           >
             <Text>{t('settings.recommended.language')} EN/FR</Text>
             <Switch
-              checked={!isEN}
-              onPress={(checked) => setLocale(checked ? 'fr' : 'en')}
+              form={false}
+              value={!isEN}
+              onChange={e => setLocale(e.target.value ? 'fr' : 'en')}
             />
           </Block>
 
           <Block
             row
-            align="center"
-            justify="space-between"
+            align='center'
+            justify='space-between'
             marginBottom={sizes.sm}
           >
             <Text>{t('settings.recommended.faceid')}</Text>
-            <Switch checked={useFaceId} onPress={setUseFaceId} />
+            <Switch
+              form={false}
+              value={useFaceId}
+              onChange={e => setUseFaceId(e.target.value)}
+            />
           </Block>
         </Block>
         {/* payment */}
         <Block card padding={sizes.sm} marginBottom={sizes.sm}>
-          <Block row align="center" marginBottom={sizes.s}>
+          <Block row align='center' marginBottom={sizes.s}>
             <Block
               flex={0}
-              align="center"
-              justify="center"
+              align='center'
+              justify='center'
               radius={sizes.s}
               width={sizes.md}
               height={sizes.md}
@@ -159,7 +174,7 @@ const SettingsScreen = () => {
               <Text size={12}>{t('settings.payment.subtitle')}</Text>
             </Block>
           </Block>
-          <Button row align="center" justify="space-between">
+          <Button row align='center' justify='space-between'>
             <Text>{t('settings.payment.options')}</Text>
             <Image
               source={assets.arrow}
@@ -169,7 +184,7 @@ const SettingsScreen = () => {
               width={10}
             />
           </Button>
-          <Button row align="center" justify="space-between">
+          <Button row align='center' justify='space-between'>
             <Text>{t('settings.payment.giftcards')}</Text>
             <Image
               source={assets.arrow}
@@ -183,11 +198,11 @@ const SettingsScreen = () => {
 
         {/* privacy */}
         <Block card padding={sizes.sm} marginBottom={sizes.sm}>
-          <Block row align="center" marginBottom={sizes.s}>
+          <Block row align='center' marginBottom={sizes.s}>
             <Block
               flex={0}
-              align="center"
-              justify="center"
+              align='center'
+              justify='center'
               radius={sizes.s}
               width={sizes.md}
               height={sizes.md}
@@ -207,9 +222,9 @@ const SettingsScreen = () => {
           </Block>
           <Button
             row
-            align="center"
-            justify="space-between"
-            onPress={() => navigation.navigate(screens.AGREEMENT)}
+            align='center'
+            justify='space-between'
+            onPress={() => navigation.navigate(SCREENS.AGREEMENT)}
           >
             <Text>{t('settings.privacy.agreement')}</Text>
             <Image
@@ -222,9 +237,9 @@ const SettingsScreen = () => {
           </Button>
           <Button
             row
-            align="center"
-            justify="space-between"
-            onPress={() => navigation.navigate(screens.PRIVACY)}
+            align='center'
+            justify='space-between'
+            onPress={() => navigation.navigate(SCREENS.PRIVACY)}
           >
             <Text>{t('settings.privacy.privacy')}</Text>
             <Image
@@ -237,9 +252,9 @@ const SettingsScreen = () => {
           </Button>
           <Button
             row
-            align="center"
-            justify="space-between"
-            onPress={() => navigation.navigate(screens.ABOUT)}
+            align='center'
+            justify='space-between'
+            onPress={() => navigation.navigate(SCREENS.ABOUT)}
           >
             <Text>{t('settings.privacy.about')}</Text>
             <Image

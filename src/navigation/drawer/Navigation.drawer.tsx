@@ -1,33 +1,25 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Animated } from 'react-native';
 import {
   createDrawerNavigator,
   DrawerContentComponentProps,
   DrawerContentScrollView,
-  useDrawerProgress,
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import Main from './Main.drawer';
 import Auth from './Auth.drawer';
 import Block from '@/components/Block';
 import Text from '@/components/Text';
-import Switch from '@/components/Inputs/Base/Switch';
 import Image from '@/components/Image';
 import Button from '@/components/Buttons/Button';
 import useTheme from '@/utils/hooks/context/useTheme';
 import useTranslation from '@/utils/hooks/context/useTranslation';
 import { Feather } from '@expo/vector-icons';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import useSession from '@/utils/hooks/context/useSession';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import useApp from '@/utils/hooks/context/useApp';
 import { CommonActions } from '@react-navigation/native';
+import Switch from '@/components/Inputs_NEW/Select/Switch';
 
 const Drawer = createDrawerNavigator();
 
@@ -95,19 +87,15 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
    * HOOKS
    */
   const {
-    state: { isDark },
-    actions: { handleIsDark },
-  } = useApp();
-  const {
     actions: { logout },
   } = useSession();
   const { t } = useTranslation();
   const { assets, colors, gradients, sizes, styles } = useTheme();
   const insets = useSafeAreaInsets();
   const {
-    state: { currentRoute, currentStack },
-    actions: { setNavigationType },
-  } = useApp();
+    state: { currentRoute, isDark },
+    actions: { setNavigationType, updateTheme },
+  } = useSession();
 
   /**
    * COMPUTED
@@ -124,54 +112,30 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const mainScreens = useMemo(() => {
     return [
-      { name: t('screens.home'), to: screens.MC_DASHBOARD, icon: assets.home },
+      { name: t('screens.home'), to: SCREENS.MC_DASHBOARD, icon: assets.home },
       // TODO: REMOVE_ME
       {
         name: 'Landing',
-        to: screens.LANDING,
+        to: SCREENS.LANDING,
         icon: assets.documentation,
       },
       {
         name: t('screens.settings'),
-        to: screens.SETTINGS,
+        to: SCREENS.SETTINGS,
         icon: assets.settings,
       },
       // TODO: REMOVE_ME
       {
         name: 'Customers',
-        to: screens.MC_CUSTOMER_LIST,
+        to: SCREENS.MC_CUSTOMER_LIST,
         icon: assets.users,
       },
       // TODO: REMOVE_ME
       {
         name: 'Entity Template',
-        to: screens.ENTITY_TEMPLATE_LIST,
+        to: SCREENS.ENTITY_TEMPLATE_LIST,
         icon: assets.more,
       },
-    ];
-  }, []);
-
-  // TODO: REMOVE_ME
-  const ctScreens = useMemo(() => {
-    return [
-      { name: t('screens.home'), to: screens.CT_HOME, icon: assets.home },
-
-      {
-        name: t('screens.components'),
-        to: screens.CT_COMPONENTS,
-        icon: assets.components,
-      },
-      {
-        name: t('screens.articles'),
-        to: screens.CT_ARTICLES,
-        icon: assets.document,
-      },
-      {
-        name: t('screens.rental'),
-        to: screens.CT_RENTALS,
-        icon: assets.rental,
-      },
-      { name: 'Automotive', to: screens.CT_AUTOMOTIVE, icon: assets.extras },
     ];
   }, []);
 
@@ -179,7 +143,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
    * FUNCTIONS
    */
   const handleNavigation = useCallback(
-    (to) => {
+    to => {
       if (currentRoute?.name !== to) {
         // reset history when changing to a different stack
         const resetAction = CommonActions.reset({
@@ -212,7 +176,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     width: number,
     height: number
   ) => {
-    setNavScrollViewLayout((prev) => ({
+    setNavScrollViewLayout(prev => ({
       ...prev,
       contentSize: { width, height },
     }));
@@ -221,7 +185,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const handleNavScrollViewOnLayout = (e: any) => {
     const newLayout = e.nativeEvent.layout;
 
-    setNavScrollViewLayout((prev) => ({
+    setNavScrollViewLayout(prev => ({
       ...prev,
       layoutMeasurement: newLayout,
     }));
@@ -233,7 +197,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     return (
       <Button
         row
-        justify="flex-start"
+        justify='flex-start'
         marginBottom={sizes.s}
         key={`menu-screen-${screen.name}-${index}`}
         onPress={() => handleNavigation(screen.to)}
@@ -241,8 +205,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
         <Block
           flex={0}
           radius={6}
-          align="center"
-          justify="center"
+          align='center'
+          justify='center'
           width={sizes.md}
           height={sizes.md}
           marginRight={sizes.s}
@@ -256,7 +220,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             color={colors[isActive ? 'white' : 'black']}
           />
         </Block>
-        <Text p semibold={isActive}>
+        <Text size='p' semibold={isActive}>
           {screen.name}
         </Text>
       </Button>
@@ -281,7 +245,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
         <Block
           flex={0}
           row
-          align="center"
+          align='center'
           marginBottom={sizes.l}
           marginTop={sizes.sm}
           radius={sizes.m}
@@ -297,7 +261,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             <Text size={12} semibold>
               mc-app
             </Text>
-            <Text size={12} semibold secondary>
+            <Text size={12} semibold variant='secondary'>
               Moreland Connect
             </Text>
           </Block>
@@ -315,18 +279,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               onContentSizeChange={handleNavScrollViewContentSizeChange}
               scrollEventThrottle={16}
             >
-              <Text secondary p bold marginBottom={sizes.xs}>
+              <Text variant='secondary' size='p' bold marginBottom={sizes.xs}>
                 Main Screens
               </Text>
               {mainScreens?.map(renderScreenRouteLink)}
-
-              <Block flex={0} height={20} />
-
-              {/* TODO: REMOVE_ME */}
-              <Text secondary p bold marginBottom={sizes.xs}>
-                CT Screens
-              </Text>
-              {ctScreens?.map(renderScreenRouteLink)}
             </Block>
 
             {!navScrollViewAtBottom && (
@@ -340,7 +296,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 ]}
               >
                 <Feather
-                  name="chevrons-down"
+                  name='chevrons-down'
                   size={sizes.h4}
                   color={colors.secondary}
                 />
@@ -350,41 +306,52 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           <Block />
         </Block>
 
-        <Block flex={0} height={1} marginVertical={sizes.sm} secondary />
+        <Block
+          flex={0}
+          height={1}
+          marginVertical={sizes.sm}
+          variant='secondary'
+        />
 
         {/* TODO: REMOVE_START */}
         <Block flex={0} row>
           <Button
             row
-            justify="center"
-            align="center"
+            justify='center'
+            align='center'
             onPress={handleSwitchToTabs}
           >
-            <Text p marginRight={sizes.s}>
+            <Text size='p' marginRight={sizes.s}>
               Switch to tab navigator
             </Text>
-            <Feather color={colors.text} name="chevron-right" size={sizes.h5} />
+            <Feather color={colors.text} name='chevron-right' size={sizes.h5} />
           </Button>
         </Block>
         {/* TODO: REMOVE_END */}
 
         {/* TODO: REMOVE_START (if dark mode isn't needed) */}
-        <Block flex={0} row justify="space-between" marginTop={sizes.sm}>
-          <Text p>{t('darkMode')}</Text>
+        <Block flex={0} row justify='space-between' marginTop={sizes.sm}>
+          <Text size='p'>{t('darkMode')}</Text>
           <Switch
-            checked={isDark}
-            onPress={(checked) => handleIsDark(checked)}
+            form={false}
+            value={isDark}
+            onChange={e => updateTheme(e.target.value)}
           />
         </Block>
         {/* TODO: REMOVE_END */}
 
         <Block flex={0} marginTop={sizes.m} marginBottom={insets.bottom}>
-          <Button onPress={handleLogout} secondary row>
-            <Text bold white transform="uppercase" marginRight={sizes.sm}>
+          <Button onPress={handleLogout} variant='secondary' row>
+            <Text
+              bold
+              variant='white'
+              transform='uppercase'
+              marginRight={sizes.sm}
+            >
               Sign out
             </Text>
-            <Text white>
-              <Feather name="log-out" size={sizes.m} />
+            <Text variant='white'>
+              <Feather name='log-out' size={sizes.m} />
             </Text>
           </Button>
         </Block>
@@ -395,18 +362,15 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 /* drawer menu navigation */
 export default () => {
-  const {
-    state: { isDark },
-  } = useApp();
   const { gradients } = useTheme();
   const {
-    state: { currentRoute, currentStack },
-  } = useApp();
+    state: { currentRoute, isDark },
+  } = useSession();
 
   return (
     <Block gradient={gradients[isDark ? 'dark' : 'light']}>
       <Drawer.Navigator
-        initialRouteName={screens.AUTH_STACK}
+        initialRouteName={SCREENS.AUTH_STACK}
         drawerContent={DrawerContent}
         screenOptions={{
           headerShown: false,
@@ -424,20 +388,20 @@ export default () => {
           },
         }}
       >
-        <Drawer.Screen name={screens.AUTH_STACK} component={AuthStack} />
+        <Drawer.Screen name={SCREENS.AUTH_STACK} component={AuthStack} />
         <Drawer.Screen
-          name={screens.MAIN_STACK}
+          name={SCREENS.MAIN_STACK}
           component={MainStack}
           options={(...stuff) => {
             const drawerLockedScreenNames: string[] = [
-              screens.ABOUT,
-              screens.PRIVACY,
-              screens.AGREEMENT,
-              screens.PROFILE,
+              SCREENS.ABOUT,
+              SCREENS.PRIVACY,
+              SCREENS.AGREEMENT,
+              SCREENS.PROFILE,
               //
               // DEMO
               // TODO: REMOVE_ME
-              screens.MC_CUSTOMER_EDIT,
+              SCREENS.MC_CUSTOMER_EDIT,
             ];
             const drawerLocked = drawerLockedScreenNames.includes(
               currentRoute?.name

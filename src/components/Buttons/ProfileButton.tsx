@@ -1,15 +1,11 @@
-import screens from '@/constants/screens';
-import useApp from '@/utils/hooks/context/useApp';
+import SCREENS from '@/constants/screens';
 import useTheme from '@/utils/hooks/context/useTheme';
-import {
-  DrawerActions,
-  StackActions,
-  useNavigation,
-} from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { ColorValue } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Text from '../Text';
+import useSession from '@/utils/hooks/context/useSession';
 
 interface IProfileButtonProps {
   textColor?: ColorValue;
@@ -26,7 +22,7 @@ const ProfileButton = ({
   const navigation = useNavigation();
   const {
     state: { navigationType },
-  } = useApp();
+  } = useSession();
 
   return (
     <>
@@ -34,12 +30,12 @@ const ProfileButton = ({
         onPress={() => {
           if (navigationType === 'drawer') {
             navigation.dispatch(
-              DrawerActions.jumpTo(screens.MAIN_STACK, {
-                screen: screens.PROFILE,
+              DrawerActions.jumpTo(SCREENS.MAIN_STACK, {
+                screen: SCREENS.PROFILE,
               })
             );
           } else {
-            navigation.navigate(screens.CT_PROFILE);
+            navigation.navigate(SCREENS.PROFILE);
           }
         }}
         style={{ display: 'flex', flexDirection: 'row' }}
@@ -49,7 +45,7 @@ const ProfileButton = ({
             Welcome, Jason
           </Text>
         )}
-        <Feather name="user" size={24} color={iconColor || colors.text} />
+        <Feather name='user' size={24} color={iconColor || colors.text} />
         {/* <Image
           radius={6}
           width={24}

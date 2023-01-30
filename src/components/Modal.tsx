@@ -8,7 +8,7 @@ import {
   Animated,
 } from 'react-native';
 import useTheme from '@/utils/hooks/context/useTheme';
-import { IModalProps } from '@/constants/types';
+import { IModalProps } from 'types';
 import Block from './Block';
 import Button from './Buttons/Button';
 import { BlurView } from 'expo-blur';
@@ -37,6 +37,7 @@ const Modal = ({
   visible,
   allowBackdropPress,
   onBackdropPress,
+  keyboardView = true,
   ...props
 }: IModalProps) => {
   /**
@@ -98,6 +99,8 @@ const Modal = ({
       ? -sizes.height / 2 + animatedViewLayout.height / 2 // center vertically on screen
       : 0; // keep on bottom of screen
 
+    slideAnimationYValue.setValue(animatedViewLayout.height || 0);
+
     // if slide animation, animate to slide value, otherwise jump there immediately
     Animated.timing(slideAnimationYValue, {
       toValue: toSlideValue,
@@ -117,6 +120,8 @@ const Modal = ({
   };
 
   const runFadeInAnimation = () => {
+    fadeAnimationValue.setValue(0);
+
     // if fade animation, animate to 1, otherwise jump there immediately
     Animated.timing(fadeAnimationValue, {
       toValue: 1,
@@ -166,22 +171,25 @@ const Modal = ({
     );
   }, [slideAnimationYValue, fadeAnimationValue, animatedViewLayout, onClose]);
 
-  const handleAnimatedLayout = useCallback((evt) => {
+  const handleAnimatedLayout = useCallback(evt => {
     setAnimatedViewLayout(evt.nativeEvent.layout);
   }, []);
 
-  const handleClickawayPress = useCallback((evt) => {
-    if (onBackdropPress) {
-      onBackdropPress(evt);
-      return;
-    }
+  const handleClickawayPress = useCallback(
+    evt => {
+      if (onBackdropPress) {
+        onBackdropPress(evt);
+        return;
+      }
 
-    if (allowBackdropPress && onClose) {
-      handleCloseModal();
-    }
-  }, []);
+      if (allowBackdropPress && onClose) {
+        handleCloseModal();
+      }
+    },
+    [animatedViewLayout]
+  );
 
-  const handleInnerContentPress = useCallback((evt) => {
+  const handleInnerContentPress = useCallback(evt => {
     //
   }, []);
 
@@ -204,7 +212,6 @@ const Modal = ({
 
   return !!modalVisible ? (
     <Portal>
-      {/* {!!props.visible && ( */}
       <BlurViewComponent
         style={{
           position: 'absolute',
@@ -216,90 +223,98 @@ const Modal = ({
           display: 'flex',
           justifyContent: showAsDialog ? 'center' : 'flex-end',
           backgroundColor: modalBackdropColor,
-          // backgroundColor: 'red',
         }}
         intensity={modalBackdropBlur}
       >
-        <Pressable style={{ flex: 1 }} onPress={handleClickawayPress}>
-          <Animated.View
-            onLayout={handleAnimatedLayout}
-            style={[
-              {
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                // backgroundColor: '#FFFFFF',
-                // height: 100,
-              },
-              {
-                opacity: fadeAnimationValue,
-                transform: [
-                  {
-                    translateY: slideAnimationYValue,
-                  },
-                ],
-              },
-            ]}
+        <Block flex={0} keyboardView={keyboardView}>
+          <Pressable
+            style={{
+              height: sizes.height,
+            }}
+            onPress={handleClickawayPress}
           >
-            <Block
-              style={{
-                flex: 1,
-                justifyContent: showAsDialog ? 'center' : 'flex-end',
-                // backgroundColor: modalBackdropColor,
-              }}
+            <Animated.View
+              onLayout={handleAnimatedLayout}
+              style={[
+                {
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                },
+                {
+                  opacity: fadeAnimationValue,
+                  transform: [
+                    {
+                      translateY: slideAnimationYValue,
+                    },
+                  ],
+                },
+              ]}
             >
               <Block
-                flex={0}
-                color={finalContentColor}
-                marginHorizontal={showAsDialog ? sizes.m : 0}
-                style={[
-                  {
-                    overflow: 'hidden',
-                  },
-
-                  showAsDialog
-                    ? {
-                        borderRadius: sizes.cardRadius,
-                      }
-                    : {
-                        borderTopLeftRadius: sizes.cardRadius,
-                        borderTopRightRadius: sizes.cardRadius,
-                      },
-                ]}
+                style={{
+                  flex: 1,
+                  justifyContent: showAsDialog ? 'center' : 'flex-end',
+                }}
               >
-                <Pressable onPress={handleInnerContentPress}>
-                  <Block flex={0} row>
-                    <Block paddingLeft={sizes.sm}>{headerContent}</Block>
+                <Block
+                  flex={0}
+                  color={finalContentColor}
+                  marginHorizontal={showAsDialog ? sizes.m : 0}
+                  style={[
+                    {
+                      overflow: 'hidden',
+                    },
 
-                    <Block flex={0}>
-                      {!hideCloseButton && (
-                        <Button onPress={handleCloseModal}>
-                          <Ionicons
-                            name="close"
-                            size={sizes.m}
-                            color={colors.secondary}
-                          />
-                        </Button>
-                      )}
+                    showAsDialog
+                      ? {
+                          borderRadius: sizes.cardRadius,
+                        }
+                      : {
+                          borderTopLeftRadius: sizes.cardRadius,
+                          borderTopRightRadius: sizes.cardRadius,
+                        },
+                  ]}
+                >
+                  <Pressable onPress={handleInnerContentPress}>
+                    <Block
+                      flex={0}
+                      row
+                      style={{
+                        minHeight: sizes.xl,
+                      }}
+                    >
+                      <Block paddingLeft={sizes.sm}>{headerContent}</Block>
+
+                      <Block flex={0}>
+                        {!hideCloseButton && (
+                          <Button onPress={handleCloseModal}>
+                            <Ionicons
+                              name='close'
+                              size={sizes.m}
+                              color={colors.secondary}
+                            />
+                          </Button>
+                        )}
+                      </Block>
                     </Block>
-                  </Block>
 
-                  <Block
-                    //
-                    flex={0}
-                    paddingHorizontal={sizes.padding}
-                    paddingBottom={showAsDialog ? sizes.m : insets.bottom}
-                  >
-                    {children}
-                  </Block>
-                </Pressable>
+                    <Block
+                      //
+                      flex={0}
+                      paddingHorizontal={sizes.padding}
+                      paddingBottom={showAsDialog ? sizes.m : insets.bottom}
+                    >
+                      {children}
+                    </Block>
+                  </Pressable>
+                </Block>
               </Block>
-            </Block>
-          </Animated.View>
-        </Pressable>
+            </Animated.View>
+          </Pressable>
+        </Block>
       </BlurViewComponent>
-      {/* )} */}
     </Portal>
   ) : null;
 };

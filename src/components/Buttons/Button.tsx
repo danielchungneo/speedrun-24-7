@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
 import useTheme from '@/utils/hooks/context/useTheme';
-import { IButtonProps } from '@/constants/types';
+import { IButtonProps } from 'types';
 
 const Button = ({
   id = 'Button',
@@ -20,18 +20,7 @@ const Button = ({
   style,
   color,
   gradient,
-  primary,
-  secondary,
-  tertiary,
-  black,
-  white,
-  light,
-  dark,
-  gray,
-  danger,
-  warning,
-  success,
-  info,
+  variant,
   flex,
   radius,
   round,
@@ -73,49 +62,27 @@ const Button = ({
   ...props
 }: IButtonProps) => {
   const { colors, sizes } = useTheme();
-  const colorIndex = primary
-    ? 'primary'
-    : secondary
-    ? 'secondary'
-    : tertiary
-    ? 'tertiary'
-    : black
-    ? 'black'
-    : white
-    ? 'white'
-    : light
-    ? 'light'
-    : dark
-    ? 'dark'
-    : gray
-    ? 'gray'
-    : danger
-    ? 'danger'
-    : warning
-    ? 'warning'
-    : success
-    ? 'success'
-    : info
-    ? 'info'
-    : null;
 
   const buttonColor = color
     ? color
-    : colorIndex
-    ? colors?.[colorIndex]
+    : !!variant
+    ? colors?.[variant as keyof typeof colors]
     : 'transparent';
 
   const buttonStyles = StyleSheet.flatten([
     {
-      minHeight: sizes.xl,
-      minWidth: sizes.xl,
+      // minHeight: sizes.xl,
+      // minWidth: sizes.xl,
+      paddingHorizontal: sizes.sm,
+      paddingVertical: sizes.s,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: buttonColor,
       borderRadius: rounded ? sizes.s : sizes.buttonRadius,
       ...(shadow &&
         buttonColor !== 'transparent' &&
-        !outlined && { // fixes bad shadow on Android
+        !outlined && {
+          // fixes bad shadow on Android
           shadowColor: colors.shadow,
           shadowOffset: {
             width: sizes.shadowOffsetWidth,
@@ -173,7 +140,7 @@ const Button = ({
 
   /* handle onPress event */
   const handlePress = useCallback(
-    (event) => {
+    event => {
       onPress?.(event);
 
       /* vibrate onPress */

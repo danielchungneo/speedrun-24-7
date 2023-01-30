@@ -4,9 +4,9 @@ import { TouchableOpacity } from 'react-native';
 import Block from '../../Block';
 import Image from '../../Image';
 import Text from '../../Text';
-import { IProduct } from '@/constants/types';
+import { IProduct } from 'types';
 import useTheme from '@/utils/hooks/context/useTheme';
-import useTranslation from '@/utils/hooks/context/useTranslation'
+import useTranslation from '@/utils/hooks/context/useTranslation';
 
 const Product = ({ image, title, type, linkLabel }: IProduct) => {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ const Product = ({ image, title, type, linkLabel }: IProduct) => {
       width={isHorizontal ? CARD_WIDTH * 2 + sizes.sm : CARD_WIDTH}
     >
       <Image
-        resizeMode="cover"
+        resizeMode='cover'
         source={{ uri: image }}
         style={{
           height: isHorizontal ? 114 : 110,
@@ -33,17 +33,16 @@ const Product = ({ image, title, type, linkLabel }: IProduct) => {
       />
       <Block
         paddingTop={sizes.s}
-        justify="space-between"
+        justify='space-between'
         paddingLeft={isHorizontal ? sizes.sm : 0}
         paddingBottom={isHorizontal ? sizes.s : 0}
       >
-        <Text p marginBottom={sizes.s}>
+        <Text size='p' marginBottom={sizes.s}>
           {title}
         </Text>
         <TouchableOpacity>
-          <Block row flex={0} align="center">
+          <Block row flex={0} align='center'>
             <Text
-              p
               color={colors.link}
               semibold
               size={sizes.linkSize}

@@ -5,6 +5,7 @@
     "description": "Moreland Connect React Native App Template - Version 1",
     "primaryColor": "#0d6efd",
     "version": "0.0.1",
+    "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -15,9 +16,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -30,19 +29,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "sentry-expo"
-    ],
+    "plugins": ["sentry-expo"],
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": [
-        "js",
-        "jsx",
-        "svg",
-        "ts",
-        "tsx",
-        "css"
-      ]
+      "sourceExts": ["js", "jsx", "svg", "ts", "tsx", "css"]
     }
   }
 }

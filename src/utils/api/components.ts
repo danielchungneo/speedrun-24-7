@@ -1,10 +1,15 @@
-import { HTTP_REQUEST_METHODS } from "@/constants/http";
-import { IBuildUrlOptions } from "@/constants/types";
+import { HTTP_REQUEST_METHODS } from '@/constants/http';
+import { IBuildUrlOptions } from 'types';
+import {
+  IComponentsApi,
+  IPermissionsFormApi,
+  ISalesOrderFormApi,
+} from 'types/apis/components';
 
-const permissionsForm = {
+const permissionsForm: IPermissionsFormApi = {
   get: (options?: IBuildUrlOptions) => {
     return {
-      url: "/view/components/permissionsForm",
+      url: '/view/components/permissionsForm',
       method: HTTP_REQUEST_METHODS.GET,
       options,
     };
@@ -18,9 +23,9 @@ const permissionsForm = {
   },
 };
 
-const salesOrderForm = {
+const salesOrderForm: ISalesOrderFormApi = {
   save: (options?: IBuildUrlOptions) => {
-    if (options?.path?.id === "create") {
+    if (options?.path?.id === 'create') {
       return {
         url: `/view/components/salesOrderForm`,
         method: HTTP_REQUEST_METHODS.POST,
@@ -35,7 +40,7 @@ const salesOrderForm = {
   },
 };
 
-const components = {
+const components: IComponentsApi = {
   permissionsForm,
   salesOrderForm,
 };

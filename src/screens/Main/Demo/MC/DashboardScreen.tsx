@@ -35,7 +35,7 @@ const BarChartLabels = ({ x, y, bandwidth, data, width, height, ticks }) => {
         x={xPosition}
         y={yPosition}
         fontSize={18}
-        fontWeight="bold"
+        fontWeight='bold'
         fill={'black'}
         alignmentBaseline={'middle'}
         textAnchor={'middle'}
@@ -61,7 +61,7 @@ const PieChartLabels = ({ slices, height, width }) => {
         textAnchor={'middle'}
         alignmentBaseline={'middle'}
         fontSize={18}
-        fontWeight="bold"
+        fontWeight='bold'
         strokeWidth={0.2}
       >
         {data.count}
@@ -89,7 +89,7 @@ const PieChartLabelsOffChart = ({ slices }) => {
           textAnchor={'middle'}
           alignmentBaseline={'middle'}
           fontSize={18}
-          fontWeight="bold"
+          fontWeight='bold'
           strokeWidth={0.2}
         >
           {data.count}
@@ -168,7 +168,7 @@ const DashboardScreen = () => {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style='light' />
 
       <Block
         scroll
@@ -179,18 +179,18 @@ const DashboardScreen = () => {
         }}
       >
         <Block
-          position="absolute"
+          position='absolute'
           top={0}
           left={0}
           height={sizes.height / 2 + headerHeight}
-          gradient={[colors.primary, colors.background]}
+          gradient={[String(colors.primary), String(colors.background)]}
           start={[0, 0]}
           end={[0, 1]}
           width={sizes.width}
         />
 
         <Block padding={sizes.padding}>
-          <Text h4 white>
+          <Text size='h4' variant='white'>
             This Month
           </Text>
 
@@ -202,22 +202,22 @@ const DashboardScreen = () => {
             marginTop={sizes.sm}
           >
             <Block>
-              <Text h5 bold secondary>
+              <Text size='h5' bold variant='secondary'>
                 Open
               </Text>
-              <Text h3>5</Text>
+              <Text size='h3'>5</Text>
             </Block>
             <Block flex={0}>
               <Block
                 height={sizes.xl}
                 width={sizes.xl}
                 radius={sizes.xl}
-                success
+                variant='success'
                 flex={0}
-                justify="center"
-                align="center"
+                justify='center'
+                align='center'
               >
-                <Feather name="phone" size={sizes.m} color={colors.white} />
+                <Feather name='phone' size={sizes.m} color={colors.white} />
               </Block>
             </Block>
           </Block>
@@ -230,22 +230,22 @@ const DashboardScreen = () => {
             paddingHorizontal={sizes.m}
           >
             <Block>
-              <Text h5 bold secondary>
+              <Text size='h5' bold variant='secondary'>
                 Closed
               </Text>
-              <Text h3>12</Text>
+              <Text size='h3'>12</Text>
             </Block>
             <Block flex={0}>
               <Block
                 height={sizes.xl}
                 width={sizes.xl}
                 radius={sizes.xl}
-                primary
+                variant='primary'
                 flex={0}
-                justify="center"
-                align="center"
+                justify='center'
+                align='center'
               >
-                <Feather name="briefcase" size={sizes.m} color={colors.white} />
+                <Feather name='briefcase' size={sizes.m} color={colors.white} />
               </Block>
             </Block>
           </Block>
@@ -258,28 +258,28 @@ const DashboardScreen = () => {
             paddingHorizontal={sizes.m}
           >
             <Block>
-              <Text h5 bold secondary>
+              <Text size='p' bold variant='secondary'>
                 In Progress
               </Text>
-              <Text h3>7</Text>
+              <Text size='h3'>7</Text>
             </Block>
             <Block flex={0}>
               <Block
                 height={sizes.xl}
                 width={sizes.xl}
                 radius={sizes.xl}
-                warning
+                variant='warning'
                 flex={0}
-                justify="center"
-                align="center"
+                justify='center'
+                align='center'
               >
-                <Feather name="clock" size={sizes.m} color={colors.white} />
+                <Feather name='clock' size={sizes.m} color={colors.white} />
               </Block>
             </Block>
           </Block>
 
           <Block flex={0} card marginTop={sizes.m} paddingHorizontal={sizes.m}>
-            <Text h4 secondary>
+            <Text size='h4' variant='secondary'>
               Stats 1
             </Text>
 
@@ -301,14 +301,14 @@ const DashboardScreen = () => {
                 <PieChartLabelsOffChart />
               </PieChart>
 
-              <Block align="flex-start">
+              <Block align='flex-start'>
                 {pieChartData.map((dataPoint, dataPointIndex) => {
                   return (
                     <Block
                       key={dataPoint.name}
                       flex={0}
                       row
-                      align="center"
+                      align='center'
                       marginTop={!!dataPointIndex ? sizes.s : sizes.md}
                     >
                       <Block
@@ -328,7 +328,7 @@ const DashboardScreen = () => {
           </Block>
 
           <Block flex={0} card marginTop={sizes.m} paddingHorizontal={sizes.m}>
-            <Text h4 secondary>
+            <Text size='h4' variant='secondary'>
               Stats 2
             </Text>
 

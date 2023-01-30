@@ -1,4 +1,4 @@
-const states = [
+export const states = [
   {
     name: 'Alabama',
     abbreviation: 'AL',
@@ -6,10 +6,6 @@ const states = [
   {
     name: 'Alaska',
     abbreviation: 'AK',
-  },
-  {
-    name: 'American Samoa',
-    abbreviation: 'AS',
   },
   {
     name: 'Arizona',
@@ -36,24 +32,12 @@ const states = [
     abbreviation: 'DE',
   },
   {
-    name: 'District Of Columbia',
-    abbreviation: 'DC',
-  },
-  {
-    name: 'Federated States Of Micronesia',
-    abbreviation: 'FM',
-  },
-  {
     name: 'Florida',
     abbreviation: 'FL',
   },
   {
     name: 'Georgia',
     abbreviation: 'GA',
-  },
-  {
-    name: 'Guam',
-    abbreviation: 'GU',
   },
   {
     name: 'Hawaii',
@@ -90,10 +74,6 @@ const states = [
   {
     name: 'Maine',
     abbreviation: 'ME',
-  },
-  {
-    name: 'Marshall Islands',
-    abbreviation: 'MH',
   },
   {
     name: 'Maryland',
@@ -156,10 +136,6 @@ const states = [
     abbreviation: 'ND',
   },
   {
-    name: 'Northern Mariana Islands',
-    abbreviation: 'MP',
-  },
-  {
     name: 'Ohio',
     abbreviation: 'OH',
   },
@@ -172,16 +148,8 @@ const states = [
     abbreviation: 'OR',
   },
   {
-    name: 'Palau',
-    abbreviation: 'PW',
-  },
-  {
     name: 'Pennsylvania',
     abbreviation: 'PA',
-  },
-  {
-    name: 'Puerto Rico',
-    abbreviation: 'PR',
   },
   {
     name: 'Rhode Island',
@@ -212,10 +180,6 @@ const states = [
     abbreviation: 'VT',
   },
   {
-    name: 'Virgin Islands',
-    abbreviation: 'VI',
-  },
-  {
     name: 'Virginia',
     abbreviation: 'VA',
   },
@@ -237,7 +201,7 @@ const states = [
   },
 ];
 
-const stateOptions = states.map((state) => ({
+export const stateOptions = states.map((state) => ({
   value: state.name,
   label: state.name,
   abbreviation: state.abbreviation,

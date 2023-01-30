@@ -1,9 +1,9 @@
-import useApp from '@/utils/hooks/context/useApp'
+import useSession from './useSession';
 
 export const useKeyboard = () => {
   const {
     state: { keyboardIsOpen },
-  } = useApp();
+  } = useSession();
 
   return { keyboardIsOpen };
 };

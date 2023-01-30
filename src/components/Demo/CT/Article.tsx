@@ -6,8 +6,8 @@ import Text from '../../Text';
 import Block from '../../Block';
 import Image from '../../Image';
 import useTheme from '@/utils/hooks/context/useTheme';
-import { IArticle } from '@/constants/types';
-import useTranslation from '@/utils/hooks/context/useTranslation'
+import { IArticle } from 'types';
+import useTranslation from '@/utils/hooks/context/useTranslation';
 
 const Article = ({
   title,
@@ -28,15 +28,14 @@ const Article = ({
     return (
       <TouchableWithoutFeedback onPress={onPress}>
         <Block card padding={sizes.sm} marginTop={sizes.sm}>
-          <Image height={170} resizeMode="cover" source={{ uri: image }} />
+          <Image height={170} resizeMode='cover' source={{ uri: image }} />
           {/* article category */}
           {category?.name && (
             <Text
-              h5
               bold
               size={13}
               marginTop={sizes.s}
-              transform="uppercase"
+              transform='uppercase'
               marginLeft={sizes.xs}
               gradient={gradients.primary}
             >
@@ -47,7 +46,7 @@ const Article = ({
           {/* article description */}
           {description && (
             <Text
-              p
+              size='p'
               marginTop={sizes.s}
               marginLeft={sizes.xs}
               marginBottom={sizes.sm}
@@ -66,11 +65,11 @@ const Article = ({
                 source={{ uri: user?.avatar }}
                 style={{ backgroundColor: colors.white }}
               />
-              <Block justify="center" marginLeft={sizes.s}>
-                <Text p semibold>
+              <Block justify='center' marginLeft={sizes.s}>
+                <Text size='p' semibold>
                   {user?.name}
                 </Text>
-                <Text p gray>
+                <Text size='p' variant='neutral'>
                   {t('common.posted', {
                     date: dayjs(timestamp).format('DD MMMM') || '-',
                   })}
@@ -81,16 +80,16 @@ const Article = ({
 
           {/* location & rating */}
           {(Boolean(location) || Boolean(rating)) && (
-            <Block row align="center">
+            <Block row align='center'>
               <Image source={icons.location} marginRight={sizes.s} />
-              <Text p size={12} semibold>
+              <Text size={12} semibold>
                 {location?.city}, {location?.country}
               </Text>
-              <Text p bold marginHorizontal={sizes.s}>
+              <Text size='p' bold marginHorizontal={sizes.s}>
                 •
               </Text>
               <Image source={icons.star} marginRight={sizes.s} />
-              <Text p size={12} semibold>
+              <Text size={12} semibold>
                 {rating}/5
               </Text>
             </Block>
@@ -103,18 +102,18 @@ const Article = ({
   // render card for Popular
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <Block card white padding={0} marginTop={sizes.sm}>
+      <Block card variant='white' padding={0} marginTop={sizes.sm}>
         <Image
           background
-          resizeMode="cover"
+          resizeMode='cover'
           radius={sizes.cardRadius}
           source={{ uri: image }}
         >
           <Block color={colors.overlay} padding={sizes.padding}>
-            <Text h4 white marginBottom={sizes.sm}>
+            <Text size='h4' variant='white' marginBottom={sizes.sm}>
               {title}
             </Text>
-            <Text p white>
+            <Text size='p' variant='white'>
               {description}
             </Text>
             {/* user details */}
@@ -126,11 +125,11 @@ const Article = ({
                 source={{ uri: user?.avatar }}
                 style={{ backgroundColor: colors.white }}
               />
-              <Block justify="center" marginLeft={sizes.s}>
-                <Text p white semibold>
+              <Block justify='center' marginLeft={sizes.s}>
+                <Text size='p' variant='white' semibold>
                   {user?.name}
                 </Text>
-                <Text p white>
+                <Text size='p' variant='white'>
                   {user?.department}
                 </Text>
               </Block>

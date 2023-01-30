@@ -5,18 +5,23 @@ import useRequest from '@/utils/hooks/useRequest';
 import { Feather } from '@expo/vector-icons';
 import { Pressable, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import useApp from '@/utils/hooks/context/useApp';
-import Select from '@/components/Inputs/Base/Select';
 import Block from '@/components/Block';
 import Text from '@/components/Text';
+import { IFilterParams, ISortParams } from 'types';
+import useSession from '@/utils/hooks/context/useSession';
+import SelectBox from '@/components/Inputs_NEW/Select/SelectBox';
 
-const sortOptions = [
+const sortOptions: {
+  value: number;
+  label: string;
+  params: ISortParams[];
+}[] = [
   {
     label: 'None',
-    params: [],
+    params: [] as ISortParams[],
   },
   {
     label: 'Name A-Z',
@@ -25,7 +30,7 @@ const sortOptions = [
         field: 'name',
         direction: 'asc',
       },
-    ],
+    ] as ISortParams[],
   },
   {
     label: 'Name Z-A',
@@ -34,14 +39,17 @@ const sortOptions = [
         field: 'name',
         direction: 'desc',
       },
-    ],
+    ] as ISortParams[],
   },
 ].map((option, index) => ({ ...option, value: index }));
 
-const filterOptions = [
+const filterOptions: {
+  label: string;
+  params: IFilterParams[];
+}[] = [
   {
     label: 'None',
-    params: [],
+    params: [] as IFilterParams[],
   },
   {
     label: '"Bob" in name',
@@ -51,7 +59,7 @@ const filterOptions = [
         value: 'Bob',
         opperand: 'contains',
       },
-    ],
+    ] as IFilterParams[],
   },
 ].map((option, index) => ({ ...option, value: index }));
 
@@ -68,7 +76,7 @@ const EntityTemplateList = () => {
   const { styles, assets, colors, fonts, gradients, sizes } = useTheme();
   const {
     state: { navigationType },
-  } = useApp();
+  } = useSession();
 
   const isUsingTabs = navigationType === 'tabs';
 
@@ -98,9 +106,9 @@ const EntityTemplateList = () => {
   /**
    * FUNCTIONS
    */
-  function openEditScreen(entity: any) {
+  function openEditScreen (entity: any) {
     return () => {
-      navigation.navigate(screens.ENTITY_TEMPLATE_EDIT, {
+      navigation.navigate(SCREENS.ENTITY_TEMPLATE_EDIT, {
         entity,
       });
     };
@@ -110,7 +118,7 @@ const EntityTemplateList = () => {
     return (
       <Block
         flex={0}
-        white={isUsingTabs}
+        variant={isUsingTabs ? 'white' : undefined}
         style={{
           borderTopWidth: 2,
           borderTopColor: colors.secondary,
@@ -132,10 +140,11 @@ const EntityTemplateList = () => {
           paddingBottom={isUsingTabs ? sizes.sm : 0}
         >
           <Block>
-            <Select
-              label="Sort"
-              labelField="label"
-              valueField="value"
+            <SelectBox
+              form={false}
+              label='Sort'
+              labelField='label'
+              valueField='value'
               options={sortOptions}
               value={sortOptions[selectedSortOptionIndex].value}
               onChange={(value, item, index) =>
@@ -147,10 +156,11 @@ const EntityTemplateList = () => {
           <Block flex={0} width={sizes.s} />
 
           <Block>
-            <Select
-              label="Filter"
-              labelField="label"
-              valueField="value"
+            <SelectBox
+              form={false}
+              label='Filter'
+              labelField='label'
+              valueField='value'
               options={filterOptions}
               value={filterOptions[selectedFilterOptionIndex].value}
               onChange={(value, item, index) =>
@@ -163,25 +173,22 @@ const EntityTemplateList = () => {
     );
   };
 
-  function renderEntity({ item, index, separators }, ...rest) {
+  function renderEntity ({ item, index, separators }, ...rest) {
     const isLast = index === flatlistData.length - 1;
 
     const content = (
       <>
         <Block>
-          <Text h5 bold>
+          <Text size='h5' bold>
             {item.name}
           </Text>
-          <Text p secondary marginTop={sizes.xs}>
+          <Text size='p' variant='secondary' marginTop={sizes.xs}>
             {item.description}
-          </Text>
-          <Text p secondary marginTop={sizes.xs}>
-            SOs: {item.salesOrder.length}
           </Text>
         </Block>
 
-        <Block flex={0} justify="center" align="center">
-          <Feather name="chevron-right" size={sizes.h4} />
+        <Block flex={0} justify='center' align='center'>
+          <Feather name='chevron-right' size={sizes.h4} />
         </Block>
       </>
     );
@@ -224,11 +231,11 @@ const EntityTemplateList = () => {
       <FlatList
         data={flatlistData}
         ListEmptyComponent={
-          <Block align="center" marginTop={sizes.m}>
-            <Text h4 secondary>
+          <Block align='center' marginTop={sizes.m}>
+            <Text size='h4' variant='secondary'>
               No entities found
             </Text>
-            <Text secondary>(pull down to refresh)</Text>
+            <Text variant='secondary'>(pull down to refresh)</Text>
           </Block>
         }
         keyExtractor={(item, index) => `${index}:${item.id}`}

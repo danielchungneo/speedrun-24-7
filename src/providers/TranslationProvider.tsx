@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 
 import translations from '@/constants/translations/';
-import { ITranslate } from '@/constants/types';
+import { ITranslate } from 'types';
 
 export const TranslationContext = React.createContext({});
 

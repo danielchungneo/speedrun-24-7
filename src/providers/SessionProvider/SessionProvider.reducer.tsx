@@ -1,20 +1,29 @@
-import { removeSessionToken, setSessionToken } from '@/utils/session';
+import { DARK_THEME } from '@/constants/theme/dark';
+import { LIGHT_THEME } from '@/constants/theme/light';
 import {
   CREATE_SESSION,
   LOGOUT,
+  ON_NAVIGATION_READY,
+  ON_NAVIGATION_STATE_CHANGE,
+  RESET_NAVIGATION_REF,
   RESTORE_SESSION,
-  SET_CURRENT_ROUTE,
-  SET_NAVIGATION_READY,
-  SET_NAVIGATION_REF,
+  SET_NAVIGATION_TYPE,
+  UPDATE_THEME,
 } from './SessionProvider.constants';
 
-export default function SessionProviderReducer(state: any, action: any): any {
-  const { type, data, ...sanitized } = action;
+export default function SessionProviderReducer (state: any, action: any): any {
+  const { type, data, token, currentRoute, currentStack, ...sanitized } =
+    action;
 
   switch (type) {
     case CREATE_SESSION:
     case RESTORE_SESSION: {
-      return { ...state, user: data };
+      const update: any = {
+        user: data,
+        token: token || state.token,
+      };
+
+      return { ...state, ...update };
     }
 
     case LOGOUT: {
@@ -25,16 +34,32 @@ export default function SessionProviderReducer(state: any, action: any): any {
       };
     }
 
-    case SET_NAVIGATION_REF: {
-      return { ...state, navigationRef: data };
+    case UPDATE_THEME: {
+      const { isDark } = action;
+
+      return {
+        ...state,
+        isDark,
+        theme: isDark ? DARK_THEME : LIGHT_THEME,
+        altTheme: isDark ? LIGHT_THEME : DARK_THEME,
+      };
     }
 
-    case SET_NAVIGATION_READY: {
-      return { ...state, navigationReady: data };
+    case ON_NAVIGATION_STATE_CHANGE: {
+      return { ...state, currentRoute, currentStack };
     }
 
-    case SET_CURRENT_ROUTE: {
-      return { ...state, currentRoute: data };
+    case ON_NAVIGATION_READY: {
+      return { ...state, navigationReady: true, currentRoute, currentStack };
+    }
+
+    case RESET_NAVIGATION_REF: {
+      return { ...state, navigationReady: false, currentRoute, currentStack };
+    }
+
+    case SET_NAVIGATION_TYPE: {
+      const { navigationType } = action;
+      return { ...state, navigationType };
     }
 
     default: {

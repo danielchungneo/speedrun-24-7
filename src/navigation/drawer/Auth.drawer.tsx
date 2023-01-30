@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import useTranslation from '@/utils/hooks/context/useTranslation';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import { useDrawerScreenOptions } from '@/utils/hooks/useScreenOptions';
 import LoginScreen from '@/screens/Auth/LoginScreen';
 import RegistrationScreen from '@/screens/Auth/RegistrationScreen';
@@ -15,24 +15,24 @@ const AuthNavigator = () => {
   const screenOptions = useDrawerScreenOptions();
 
   return (
-    <Stack.Navigator initialRouteName={screens.LOGIN}>
+    <Stack.Navigator initialRouteName={SCREENS.LOGIN}>
       <Stack.Screen
-        name={screens.LOGIN}
+        name={SCREENS.LOGIN}
         component={LoginScreen}
         options={screenOptions.loginScreen}
       />
       <Stack.Screen
-        name={screens.RESET_PASSWORD}
+        name={SCREENS.RESET_PASSWORD}
         component={ResetPasswordScreen}
         options={screenOptions.resetPasswordScreen}
       />
       <Stack.Screen
-        name={screens.RESET_PASSWORD_REQUEST}
+        name={SCREENS.RESET_PASSWORD_REQUEST}
         component={ResetPasswordRequestScreen}
         options={screenOptions.resetPasswordRequestScreen}
       />
       <Stack.Screen
-        name={screens.REGISTER}
+        name={SCREENS.REGISTER}
         component={RegistrationScreen}
         options={screenOptions.registerScreen}
       />

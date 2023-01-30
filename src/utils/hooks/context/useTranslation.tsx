@@ -1,4 +1,4 @@
-import { ITranslate } from '@/constants/types';
+import { ITranslate } from 'types';
 import { TranslationContext } from '@/providers/TranslationProvider';
 import { useContext } from 'react';
 

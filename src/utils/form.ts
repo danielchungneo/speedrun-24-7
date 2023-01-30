@@ -1,6 +1,4 @@
 import { format } from 'date-fns';
-import { result } from 'lodash';
-import moment from 'moment';
 import { convertDatetimeToUTC } from './date';
 
 export const convertFormToJson = (form: any, keysToChange: any = {}) => {
@@ -35,7 +33,6 @@ const setNestedObjectValue = (
   if (routes.length === 1) {
     const newVal =
       typeof value === 'function' ? value(baseObject[nextRoute]) : value;
-    // console.log({ newVal, type: typeof value })
     baseObject[nextRoute] = newVal;
     return baseObject;
   }
@@ -66,8 +63,6 @@ export const convertJsonToForm = (json: any, keysToChange: any) => {
         setNestedObjectValue(formValues, field, formatDate);
       } catch (e) {
         //
-        console.log(e);
-        console.log({ json, keysToChange });
       }
     });
   }
@@ -127,55 +122,6 @@ export const formatAddressSelect = (array) => {
   return null;
 };
 
-// To convert the dates of an array of objects based on field names
-// Example: convertDateToFormArrayOfObjects(job, job.jobLine, ["plannedEndDate", "plannedStartDate"], "jobLine")
-export const convertDateToFormNestedArrayOfObjects = (
-  object = null,
-  array: [],
-  fields: string[],
-  path: string,
-  format = 'YYYY-MM-DD'
-) => {
-  if (array) {
-    const convertedDate = array.map((childObject) => {
-      // Get all keys
-      const keys = Object.keys(childObject);
-      // Iterate through each key and value
-      keys.forEach((key, index) => {
-        const date = childObject[key];
-        // If the key is one of the field names, reformat the date
-        if (fields.includes(key)) {
-          childObject[key] = moment(date).format(format);
-        }
-      });
-      return childObject;
-    });
-    if (object) {
-      object[path] = convertedDate;
-      return object;
-    }
-
-    return convertedDate;
-  }
-};
-
-export const convertDateToFormOfObject = (
-  object: any,
-  fields: string[],
-  format = 'YYYY-MM-DD'
-) => {
-  if (object) {
-    const keys = Object.keys(object);
-    keys.forEach((key, index) => {
-      const date = object[key];
-      if (fields.includes(key)) {
-        object[key] = moment(date).format(format);
-      }
-    });
-    return object;
-  }
-};
-
 export const buildPath = (...fields: string[]) => {
   return fields.join('.');
 };
@@ -185,6 +131,5 @@ export const formatNameField = (objectList: any) => {
     (nameObject) =>
       (nameObject.fullName = `${nameObject.firstName} ${nameObject.lastName}`)
   );
-  console.log(objectList);
   return objectList;
 };

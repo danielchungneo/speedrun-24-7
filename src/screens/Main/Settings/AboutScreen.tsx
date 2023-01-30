@@ -14,7 +14,7 @@ const AboutScreen = () => {
   const { t } = useTranslation();
   const { gradients, sizes } = useTheme();
 
-  const handleWebLink = useCallback((url) => Linking.openURL(url), []);
+  const handleWebLink = useCallback(url => Linking.openURL(url), []);
 
   return (
     <>
@@ -26,18 +26,18 @@ const AboutScreen = () => {
         contentContainerStyle={{ paddingBottom: sizes.padding * 1.5 }}
       >
         <Block card flex={0} padding={sizes.sm} marginBottom={sizes.sm}>
-          <Text p semibold marginBottom={sizes.sm}>
+          <Text size='p' semibold marginBottom={sizes.sm}>
             About MC-APP
           </Text>
-          <Text align="justify" marginBottom={sizes.s}>
+          <Text align='justify' marginBottom={sizes.s}>
             Speed up development with
-            <Text primary semibold>
+            <Text variant='primary' semibold>
               &nbsp;MC-APP
             </Text>
             , a powerful template that allows quick iterations to build full
             enterprise apps.
           </Text>
-          <Text align="justify" marginBottom={sizes.s}>
+          <Text align='justify' marginBottom={sizes.s}>
             The product is loaded with lots of components (like buttons, icons,
             cards, sections, example pages, and many more) that will assist in
             the initial build.
@@ -47,29 +47,29 @@ const AboutScreen = () => {
             gradient={gradients.primary}
             onPress={() => handleWebLink('https://morelandconnect.com')}
           >
-            <Text white semibold>
+            <Text variant='white' semibold>
               Visit MorelandConnect
             </Text>
           </Button>
         </Block>
         <Block card flex={0} padding={sizes.sm}>
-          <Text p semibold>
+          <Text size='p' semibold>
             {t('common.appDetails')}
           </Text>
-          <Block flex={0} row justify="space-between" marginTop={sizes.sm}>
+          <Block flex={0} row justify='space-between' marginTop={sizes.sm}>
             <Text>App name</Text>
             <Text semibold>MC-APP</Text>
           </Block>
 
-          <Block flex={0} row justify="space-between" marginTop={sizes.sm}>
+          <Block flex={0} row justify='space-between' marginTop={sizes.sm}>
             <Text>{t('common.appVersion')}</Text>
             <Text semibold>{app.expo.version}</Text>
           </Block>
-          <Block flex={0} row justify="space-between" marginTop={sizes.sm}>
+          <Block flex={0} row justify='space-between' marginTop={sizes.sm}>
             <Text>{t('common.buildVersion')}</Text>
             <Text semibold>{Constants.nativeBuildVersion}</Text>
           </Block>
-          <Block flex={0} row justify="space-between" marginTop={sizes.sm}>
+          <Block flex={0} row justify='space-between' marginTop={sizes.sm}>
             <Text>{t('common.expoVersion')}</Text>
             <Text semibold>{Constants.expoVersion}</Text>
           </Block>

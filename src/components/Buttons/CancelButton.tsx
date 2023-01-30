@@ -4,8 +4,8 @@ import Button from './Button';
 
 const CancelButton = ({ disabled, onPress }: any) => {
   return (
-    <Button black flex={1} disabled={disabled} onPress={onPress}>
-      <Text bold white>
+    <Button variant='black' flex={1} disabled={disabled} onPress={onPress}>
+      <Text bold variant='white'>
         Cancel
       </Text>
     </Button>

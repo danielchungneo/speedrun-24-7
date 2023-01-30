@@ -1,14 +1,11 @@
 import { HTTP_REQUEST_METHODS } from '@/constants/http';
-import { IAction } from '@/constants/types';
-import { GenericObject } from '@/constants/types/data';
-import { useSession } from '@/context/SessionContext';
-import useApp from '@/utils/hooks/context/useApp';
+import { IAction } from 'types';
+import { GenericObject } from 'types/data';
 import { buildUrl, createRequest, fetcherWithToken } from '@/utils/http';
 import { cloneDeep } from 'lodash';
-import { useEffect } from 'react';
 import { useState } from 'react';
 import useSWR from 'swr';
-import { getSessionToken } from '../session';
+import useToken from './context/useToken';
 
 export interface IUseRequestOptions {
   onComplete?: (data: any, errors: any) => void;
@@ -20,7 +17,7 @@ export interface IUseRequestOptions {
   tokenOverride?: string;
 }
 
-export default function useRequest(
+export default function useRequest (
   action: IAction,
   {
     onComplete,
@@ -36,9 +33,10 @@ export default function useRequest(
   /**
    * SWR: If the action is a GET request and swr is enabled, use SWR
    */
+
   const {
     state: { token },
-  } = useApp();
+  } = useToken();
 
   const swrUrl = buildUrl(action.url, action.options);
 

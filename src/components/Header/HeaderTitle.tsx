@@ -15,7 +15,7 @@ const HeaderTitle = ({ title, color }: IHeaderTitleProps) => {
 
   return (
     <Block flex={0}>
-      <Text h5 color={color || colors.black}>
+      <Text size='h5' color={color || colors.black}>
         {title}
       </Text>
     </Block>

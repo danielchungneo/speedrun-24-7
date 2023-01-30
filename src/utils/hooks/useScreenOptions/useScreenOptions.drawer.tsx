@@ -15,7 +15,7 @@ import Image from '@/components/Image';
 import Text from '@/components/Text';
 import useTheme from '@/utils/hooks/context/useTheme';
 import Block from '@/components/Block';
-import screens from '@/constants/screens';
+import SCREENS from '@/constants/screens';
 import { BlurView } from 'expo-blur';
 import DrawerToggleButton from '@/components/Buttons/DrawerToggleButton';
 import GoBackButton from '@/components/Buttons/GoBackButton';
@@ -24,10 +24,6 @@ import CreateButton from '@/components/Buttons/CreateButton';
 import HeaderRightWrapper from '@/components/Header/HeaderRightWrapper';
 import HeaderLeftWrapper from '@/components/Header/HeaderLeftWrapper';
 import HeaderTitle from '@/components/Header/HeaderTitle';
-
-// TODO: REMOVE_ME
-import useDemo from '@/utils/hooks/context/useDemo';
-import { DrawerNavigationOptions } from '@react-navigation/drawer';
 
 export default () => {
   const { t } = useTranslation();
@@ -142,8 +138,8 @@ export default () => {
         backgroundColor: colors.primary,
       },
       headerLeft: () => <DrawerToggleButton color={colors.white} />,
-      headerTitle: () => <HeaderTitle title="Entity" color={colors.white} />,
-      headerRight: () => <CreateButton route={screens.ENTITY_TEMPLATE_EDIT} />,
+      headerTitle: () => <HeaderTitle title='Entity' color={colors.white} />,
+      headerRight: () => <CreateButton route={SCREENS.ENTITY_TEMPLATE_EDIT} />,
     } as StackNavigationOptions,
 
     entityTemplateEditScreen: {
@@ -152,7 +148,7 @@ export default () => {
       },
       headerLeft: () => <GoBackButton color={colors.white} />,
       headerTitle: () => (
-        <HeaderTitle title="Edit Entity" color={colors.white} />
+        <HeaderTitle title='Edit Entity' color={colors.white} />
       ),
     } as StackNavigationOptions,
     // TODO: REMOVE_END
@@ -187,8 +183,8 @@ export default () => {
         backgroundColor: colors.primary,
       },
       headerLeft: () => <DrawerToggleButton color={colors.white} />,
-      headerTitle: () => <HeaderTitle title="Customers" color={colors.white} />,
-      headerRight: () => <CreateButton route={screens.MC_CUSTOMER_EDIT} />,
+      headerTitle: () => <HeaderTitle title='Customers' color={colors.white} />,
+      headerRight: () => <CreateButton route={SCREENS.MC_CUSTOMER_EDIT} />,
     } as StackNavigationOptions,
 
     mcCustomerEditScreen: {
@@ -197,132 +193,8 @@ export default () => {
       },
       headerLeft: () => <GoBackButton color={colors.white} />,
       headerTitle: () => (
-        <HeaderTitle title="Edit Customer" color={colors.white} />
+        <HeaderTitle title='Edit Customer' color={colors.white} />
       ),
-    } as StackNavigationOptions,
-  };
-  // TODO: REMOVE_END
-
-  /**
-   *
-   *
-   *
-   *
-   *
-   * CT DEMO
-   * TODO: REMOVE_START
-   */
-  const { user, basket } = useDemo();
-  const ctAppDemoOptions = {
-    ctHomeScreen: {
-      title: t('navigation.home'),
-    } as StackNavigationOptions,
-
-    ctComponentsScreen: {
-      ...defaultDrawerToggle,
-      headerTitle: () => (
-        <Text p white>
-          {t('navigation.components')}
-        </Text>
-      ),
-      headerRight: () => null,
-      headerLeft: () => <DrawerToggleButton />,
-    } as StackNavigationOptions,
-
-    ctArticlesScreen: {
-      title: t('navigation.articles'),
-    } as StackNavigationOptions,
-
-    ctRentalsScreen: {
-      ...defaultDrawerToggle,
-      title: t('navigation.rentals'),
-    } as StackNavigationOptions,
-
-    ctRentalScreen: {
-      ...defaultDrawerToggle,
-      headerLeft: () => <GoBackButton />,
-      title: t('navigation.rental'),
-    } as StackNavigationOptions,
-
-    ctBookingScreen: {
-      ...defaultDrawerToggle,
-      headerLeft: () => <GoBackButton />,
-      title: t('navigation.booking'),
-    } as StackNavigationOptions,
-
-    ctChatScreen: {
-      ...defaultDrawerToggle,
-      title: t('navigation.chat'),
-      headerLeft: () => <GoBackButton />,
-      headerRight: () => (
-        <HeaderRightWrapper>
-          <TouchableOpacity
-            style={{ marginRight: sizes.sm }}
-            onPress={() =>
-              navigation.navigate(screens.CT_STACK, {
-                screen: screens.CT_NOTIFICATIONS,
-              })
-            }
-          >
-            <Image source={icons.bell} radius={0} color={colors.icon} />
-            <Block
-              flex={0}
-              right={0}
-              width={sizes.s}
-              height={sizes.s}
-              radius={sizes.xs}
-              position="absolute"
-              gradient={gradients?.primary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.dispatch(
-                DrawerActions.jumpTo(screens.MAIN_STACK, {
-                  screen: screens.PROFILE,
-                })
-              )
-            }
-          >
-            <Image
-              radius={6}
-              width={24}
-              height={24}
-              source={{ uri: user.avatar }}
-            />
-          </TouchableOpacity>
-        </HeaderRightWrapper>
-      ),
-    } as StackNavigationOptions,
-
-    ctNotificationSettingsScreen: {
-      ...defaultBackOption,
-      title: t('navigation.notifications'),
-    } as StackNavigationOptions,
-
-    ctNotificationsScreen: {
-      ...defaultDrawerToggle,
-      title: t('navigation.notifications'),
-      headerRight: () => null,
-      headerLeft: () => (
-        <GoBackButton
-          onPress={() =>
-            navigation.navigate(screens.MAIN_STACK, {
-              screen: screens.SETTINGS,
-            })
-          }
-        />
-      ),
-    } as StackNavigationOptions,
-
-    ctAutomotiveScreen: {
-      title: 'Automotive',
-      headerRight: () => null,
-    } as StackNavigationOptions,
-
-    ctShoppingScreen: {
-      ...defaultBackOption,
-      title: t('navigation.shopping'),
     } as StackNavigationOptions,
   };
   // TODO: REMOVE_END
@@ -332,6 +204,5 @@ export default () => {
     ...authOptions,
     ...mainOptions,
     ...mcAppDemoOptions, // TODO: REMOVE_ME
-    ...ctAppDemoOptions, // TODO: REMOVE_ME
   };
 };

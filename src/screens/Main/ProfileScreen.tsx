@@ -66,7 +66,7 @@ const ProfileScreen = () => {
           <Block flex={0}>
             <Image
               background
-              resizeMode="cover"
+              resizeMode='cover'
               padding={sizes.sm}
               paddingBottom={sizes.l}
               radius={sizes.cardRadius}
@@ -77,23 +77,23 @@ const ProfileScreen = () => {
                 style={{ padding: sizes.s, marginBottom: sizes.sm }}
               />
 
-              <Block flex={0} align="center">
+              <Block flex={0} align='center'>
                 <Image
                   width={64}
                   height={64}
                   marginBottom={sizes.sm}
                   source={{ uri: user?.avatar }}
                 />
-                <Text h5 center white>
+                <Text size='h5' center variant='white'>
                   {user?.name}
                 </Text>
-                <Text p center white>
+                <Text size='p' center variant='white'>
                   {user?.department}
                 </Text>
 
                 <Block row marginVertical={sizes.m}>
                   <Button
-                    white
+                    variant='white'
                     outlined
                     shadow={false}
                     radius={sizes.m}
@@ -102,12 +102,12 @@ const ProfileScreen = () => {
                     }}
                   >
                     <Block
-                      justify="center"
+                      justify='center'
                       radius={sizes.m}
                       paddingHorizontal={sizes.m}
-                      color="rgba(255,255,255,0.2)"
+                      color='rgba(255,255,255,0.2)'
                     >
-                      <Text white bold transform="uppercase">
+                      <Text variant='white' bold transform='uppercase'>
                         {t('common.follow')}
                       </Text>
                     </Block>
@@ -116,26 +116,26 @@ const ProfileScreen = () => {
                     shadow={false}
                     radius={sizes.m}
                     marginHorizontal={sizes.sm}
-                    color="rgba(255,255,255,0.2)"
+                    color='rgba(255,255,255,0.2)'
                     outlined={String(colors.white)}
                     onPress={() => handleSocialLink('twitter')}
                   >
                     <Ionicons
                       size={18}
-                      name="logo-twitter"
+                      name='logo-twitter'
                       color={colors.white}
                     />
                   </Button>
                   <Button
                     shadow={false}
                     radius={sizes.m}
-                    color="rgba(255,255,255,0.2)"
+                    color='rgba(255,255,255,0.2)'
                     outlined={String(colors.white)}
                     onPress={() => handleSocialLink('dribbble')}
                   >
                     <Ionicons
                       size={18}
-                      name="logo-dribbble"
+                      name='logo-dribbble'
                       color={colors.white}
                     />
                   </Button>
@@ -149,8 +149,8 @@ const ProfileScreen = () => {
               radius={sizes.sm}
               shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
               marginTop={-sizes.l}
-              marginHorizontal="8%"
-              color="rgba(255,255,255,0.2)"
+              marginHorizontal='8%'
+              color='rgba(255,255,255,0.2)'
             >
               <Block
                 row
@@ -158,22 +158,22 @@ const ProfileScreen = () => {
                 flex={0}
                 intensity={100}
                 radius={sizes.sm}
-                overflow="hidden"
+                overflow='hidden'
                 tint={colors.blurTint}
-                justify="space-evenly"
+                justify='space-evenly'
                 paddingVertical={sizes.sm}
                 renderToHardwareTextureAndroid
               >
-                <Block align="center">
-                  <Text h5>{user?.stats?.posts}</Text>
+                <Block align='center'>
+                  <Text size='h5'>{user?.stats?.posts}</Text>
                   <Text>{t('profile.posts')}</Text>
                 </Block>
-                <Block align="center">
-                  <Text h5>{(user?.stats?.followers || 0) / 1000}k</Text>
+                <Block align='center'>
+                  <Text size='h5'>{(user?.stats?.followers || 0) / 1000}k</Text>
                   <Text>{t('profile.followers')}</Text>
                 </Block>
-                <Block align="center">
-                  <Text h5>{(user?.stats?.following || 0) / 1000}k</Text>
+                <Block align='center'>
+                  <Text size='h5'>{(user?.stats?.following || 0) / 1000}k</Text>
                   <Text>{t('profile.following')}</Text>
                 </Block>
               </Block>
@@ -181,29 +181,34 @@ const ProfileScreen = () => {
 
             {/* profile: about me */}
             <Block paddingHorizontal={sizes.sm}>
-              <Text h5 semibold marginBottom={sizes.s} marginTop={sizes.sm}>
+              <Text
+                size='h5'
+                semibold
+                marginBottom={sizes.s}
+                marginTop={sizes.sm}
+              >
                 {t('profile.aboutMe')}
               </Text>
-              <Text p lineHeight={26}>
+              <Text size='p' lineHeight={26}>
                 {user?.about}
               </Text>
             </Block>
 
             {/* profile: photo album */}
             <Block paddingHorizontal={sizes.sm} marginTop={sizes.s}>
-              <Block row align="center" justify="space-between">
-                <Text h5 semibold>
+              <Block row align='center' justify='space-between'>
+                <Text size='h5' semibold>
                   {t('common.album')}
                 </Text>
                 <Button>
-                  <Text p primary semibold>
+                  <Text size='p' variant='primary' semibold>
                     {t('common.viewall')}
                   </Text>
                 </Button>
               </Block>
-              <Block row justify="space-between" wrap="wrap">
+              <Block row justify='space-between' wrap='wrap'>
                 <Image
-                  resizeMode="cover"
+                  resizeMode='cover'
                   source={assets?.photo1}
                   style={{
                     width: IMAGE_VERTICAL_SIZE + IMAGE_MARGIN / 2,
@@ -212,7 +217,7 @@ const ProfileScreen = () => {
                 />
                 <Block marginLeft={sizes.m}>
                   <Image
-                    resizeMode="cover"
+                    resizeMode='cover'
                     source={assets?.photo2}
                     marginBottom={IMAGE_VERTICAL_MARGIN}
                     style={{
@@ -221,7 +226,7 @@ const ProfileScreen = () => {
                     }}
                   />
                   <Image
-                    resizeMode="cover"
+                    resizeMode='cover'
                     source={assets?.photo3}
                     style={{
                       height: IMAGE_VERTICAL_SIZE,
