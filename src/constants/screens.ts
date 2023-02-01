@@ -3,6 +3,8 @@ const SCREENS = {
   // App Screens
   HOME: "Home" as never,
   RUN_DASHBOARD: "RunDashboard" as never,
+  RUN_DETAILS: "RunDetails" as never,
+  RUN_TRACKING: "RunTracking" as never,
 
 
   /**

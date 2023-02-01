@@ -129,113 +129,89 @@ const LoginScreen = () => {
   }, [currentRoute]);
 
   return (
-    <>
-      <StatusBar style="light" />
-
-      <Image
-        background
-        resizeMode="cover"
-        source={darkBackground}
-        height={sizes.height}
-        onLoad={onBackgroundImageFinishedLoading}
+    <Block safe color={COLORS.DARK_BLUE}>
+      <Block
+        keyboard
+        bounces={false}
+        paddingHorizontal={sizes.s}
+        contentContainerStyle={[
+          {
+            flex: 1,
+            justifyContent: 'center',
+          },
+        ]}
       >
-        {backgroundImageLoaded && (
-          <Block safe>
-            <Block
-              keyboard
-              bounces={false}
-              paddingHorizontal={sizes.s}
-              contentContainerStyle={[
-                {
-                  flex: 1,
-                  justifyContent: 'center',
-                },
-              ]}
-            >
-              {/* login form */}
-              <Block
-                flex={0}
-                marginHorizontal="4%"
-                // shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
-                radius={sizes.sm}
-              >
-                <Block
-                  color={COLORS.DARK_BLUE}
-                  flex={0}
-                  intensity={40}
-                  blur
-                  radius={sizes.cardRadius}
-                  overflow="hidden"
-                  justify="space-evenly"
-                  paddingVertical={sizes.l}
-                  paddingHorizontal={sizes.m}
-                  align="center"
-                >
-                  <Block
-                    flex={0}
-                    row
-                    center
-                    color="#C060A1"
-                    radius={10}
-                    width={100}
-                    marginBottom={15}
-                  >
-                    <MultiTap
-                      onDoubleTap={() => setShowApiDetails((prev) => !prev)}
-                    >
-                      <Image
-                        background
-                        resizeMode="contain"
-                        source={clockLogo}
-                        width={190}
-                        height={150}
-                      />
-                    </MultiTap>
-                  </Block>
-                  <Block flex={0}>
-                    <Text color="white" font="AudioWide-Regular" size={35}>
-                      Speedrun 24-7
-                    </Text>
-                  </Block>
-
-                  {/* form inputs */}
-
-                  <Button
-                    onPress={() => handleContinue()}
-                    marginTop={sizes.sm}
-                    marginBottom={sizes.s}
-                    // variant="success"
-                    color="#34c85b"
-                  >
-                    <Text size={20} bold variant="white" transform="uppercase">
-                      Start Zooming
-                    </Text>
-                  </Button>
-                </Block>
-              </Block>
-            </Block>
-
-            {showApiDetails && (
-              <Pressable onPress={() => setShowApiDetails(false)}>
-                <Block
-                  flex={0}
-                  marginHorizontal={sizes.padding}
-                  radius={sizes.cardRadius}
-                  padding={sizes.padding}
-                >
-                  <Text size="p" center>
-                    API Endpoint:
-                  </Text>
-                  <Text size="p" semibold center>
-                    {DEFAULT_API_CONFIG.url}
-                  </Text>
-                </Block>
-              </Pressable>
-            )}
+        {/* login form */}
+        <Block
+          flex={0}
+          // shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
+          radius={sizes.sm}
+          justify="center"
+          align="center"
+        >
+          <Block
+            flex={0}
+            row
+            center
+            color="#C060A1"
+            radius={10}
+            width={100}
+            marginBottom={50}
+          >
+            <MultiTap onDoubleTap={() => setShowApiDetails((prev) => !prev)}>
+              <Image
+                background
+                resizeMode="contain"
+                source={clockLogo}
+                width={190}
+                height={150}
+              />
+            </MultiTap>
           </Block>
-        )}
-      </Image>
-    </>
+          <Block flex={0} marginBottom={25}>
+            <Text color="white" font="AudioWide-Regular" size={35}>
+              Speedrun 24-7
+            </Text>
+            <Text center color="white" font="AudioWide-Regular" size={12}>
+              Making the Mundane Competitive
+            </Text>
+          </Block>
+
+          {/* form inputs */}
+        </Block>
+        <Block flex={0} padding={sizes.sm}>
+          <Button
+            onPress={() => handleContinue()}
+            marginTop={sizes.sm}
+            marginBottom={sizes.s}
+            // variant="success"
+            color="#34c85b"
+          >
+            <Text size={20} bold variant="white" transform="uppercase">
+              Start Speeding
+            </Text>
+          </Button>
+        </Block>
+      </Block>
+
+      {showApiDetails && (
+        <Pressable onPress={() => setShowApiDetails(false)}>
+          <Block
+            flex={0}
+            marginHorizontal={sizes.padding}
+            radius={sizes.cardRadius}
+            padding={sizes.padding}
+          >
+            <Text size="p" center>
+              API Endpoint:
+            </Text>
+            <Text size="p" semibold center>
+              {DEFAULT_API_CONFIG.url}
+            </Text>
+          </Block>
+        </Pressable>
+      )}
+    </Block>
   );
 };
 

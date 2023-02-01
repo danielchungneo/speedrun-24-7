@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import Block from './Block';
 import ActionBar from './Buttons/ActionBar';
 import CancelButton from './Buttons/CancelButton';
-import DeleteButton from './Buttons/DeleteButton';
 import SaveButton from './Buttons/SaveButton';
 import TextField from './Inputs_NEW/Text/TextField';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
@@ -17,31 +16,28 @@ import { generateGuid } from '@/utils/data';
 import { cloneDeep } from 'lodash';
 
 export const SPEED_RUN_FIELDS = {
-  // textfield: text
   NAME: 'name',
-  DESCRIPTION: 'description',
 };
 
 const formValidationSchema = Yup.object({
   [SPEED_RUN_FIELDS.NAME]: Yup.string().required(),
-  [SPEED_RUN_FIELDS.DESCRIPTION]: Yup.string().nullable(),
 });
 
-type SpeedRunFormProps = {
-  speedRun?: any,
+type SplitFormProps = {
+  split?: any,
   onCloseForm: (refetch?: boolean) => void,
-  title: string,
   userData: any,
   revalidateCache: () => void,
+  selectedRun: any,
 };
 
-function SpeedRunForm({
-  speedRun,
+function SplitForm({
+  split,
   onCloseForm,
-  title,
   userData,
   revalidateCache,
-}: SpeedRunFormProps) {
+  selectedRun,
+}: SplitFormProps) {
   const { styles, assets, colors, fonts, gradients, sizes } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -51,7 +47,7 @@ function SpeedRunForm({
 
   const formMethods = useForm({
     resolver: yupResolver(formValidationSchema),
-    defaultValues: speedRun || defaultValues,
+    defaultValues: split || defaultValues,
   });
 
   const {
@@ -72,20 +68,21 @@ function SpeedRunForm({
   };
 
   const onSubmit = (values: any) => {
-    if (!speedRun) {
+    if (!split) {
       const guid = generateGuid();
       values.id = guid;
-      values.splits = [];
-      if (userData) {
-        saveData(JSON.stringify([...userData, values]));
-      } else {
-        saveData(JSON.stringify([values]));
-      }
+      const resultData = userData.map((run: any) => {
+        if (run.id === selectedRun.id) {
+          run.splits.push(values);
+        }
+        return run;
+      });
+      saveData(JSON.stringify(resultData));
     } else {
       const resultData = userData.map((run: any) => {
         if (run.id === values.id) {
-          run.name = values.name;
-          run.description = values.description;
+          run.splits.find((split: any) => split.id === values.id).name =
+            values.name;
         }
         return run;
       });
@@ -116,25 +113,13 @@ function SpeedRunForm({
           label="Name"
           name={SPEED_RUN_FIELDS.NAME}
         />
-
-        <TextField
-          type="textarea"
-          label="Description"
-          name={SPEED_RUN_FIELDS.DESCRIPTION}
-        />
       </Block>
 
       <ActionBar>
         <CancelButton onPress={onCloseForm} />
 
-        {/* {speedRun && (
-          <DeleteButton
-            request={id => api.entities.customers.delete({ path: { id } })}
-          />
-        )} */}
-
         <SaveButton
-          text={speedRun ? 'Save' : 'Add Run'}
+          text={split ? 'Save' : 'Add Split'}
           color={COLORS.GREEN}
           onPress={handleSubmit(onSubmit)}
         />
@@ -143,4 +128,4 @@ function SpeedRunForm({
   );
 }
 
-export default SpeedRunForm;
+export default SplitForm;

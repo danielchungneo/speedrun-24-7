@@ -1,3 +1,4 @@
+import React from 'react';
 import Block from '@/components/Block';
 import { StatusBar } from 'expo-status-bar';
 import useTheme from '@/utils/hooks/context/useTheme';
@@ -9,6 +10,9 @@ import { useEffect, useState } from 'react';
 import GlassCard from '@/components/GlassCard';
 import Modal from '@/components/Modal';
 import AddSpeedrunModal from '@/components/AddSpeedrunModal';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { generateGuid } from '@/utils/data';
 
 type RunDashboardProps = {
   //
@@ -16,7 +20,8 @@ type RunDashboardProps = {
 
 const RunDashboard = (props: RunDashboardProps) => {
   const { styles, sizes } = useTheme();
-  const { getItem, setItem } = useAsyncStorage('userData');
+  const navigation = useNavigation();
+  const { getItem, setItem, removeItem } = useAsyncStorage('userData');
 
   const [userData, setUserData] = useState(null);
 
@@ -26,11 +31,17 @@ const RunDashboard = (props: RunDashboardProps) => {
     const data = await getItem();
     setUserData(data ? JSON.parse(data) : null);
   };
-  useEffect(() => {
-    getUserData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserData();
+    }, [])
+  );
 
-  console.log({ userData });
+  const handleNavigateToDetailsScreen = (run: any) => {
+    navigation.navigate('RunDetails', run);
+  };
+
+  console.log(userData);
 
   return (
     <>
@@ -62,35 +73,35 @@ const RunDashboard = (props: RunDashboardProps) => {
               />
             </Block>
           </Block>
-          <Block>
-            {userData ? (
+          <Block scroll>
+            {userData && userData.length > 0 ? (
               userData?.map((run: any, index: number) => {
                 return (
-                  <Block flex={0} marginBottom={sizes.sm}>
-                    <GlassCard>
-                      <Block flex={0} padding={sizes.sm}>
-                        <Text
-                          marginBottom={sizes.sm}
-                          color="white"
-                          size={sizes.s1}
-                        >
-                          {run.name}
-                        </Text>
-                        <Text
-                          marginBottom={sizes.sm}
-                          color="white"
-                          size={sizes.s5}
-                        >
-                          {run.description}
-                        </Text>
-                      </Block>
-                    </GlassCard>
+                  <Block flex={0} marginBottom={sizes.sm} key={run.id}>
+                    <TouchableOpacity
+                      onPress={() => handleNavigateToDetailsScreen(run)}
+                    >
+                      <GlassCard>
+                        <Block flex={0} padding={sizes.sm}>
+                          <Text
+                            marginBottom={sizes.sm}
+                            color="white"
+                            size={sizes.s1}
+                          >
+                            {run.name}
+                          </Text>
+                          <Text color={COLORS.GREEN} size={sizes.s4}>{`PB: ${
+                            run?.personalBest || '---'
+                          }`}</Text>
+                        </Block>
+                      </GlassCard>
+                    </TouchableOpacity>
                   </Block>
                 );
               })
             ) : (
               <GlassCard>
-                <Block flex={0} padding={sizes.padding} align='center'>
+                <Block flex={0} padding={sizes.padding} align="center">
                   <Text marginBottom={sizes.sm} color="white" size={sizes.s3}>
                     No Runs Created Yet
                   </Text>

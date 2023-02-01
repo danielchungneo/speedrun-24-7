@@ -3,39 +3,39 @@ import useTheme from '@/utils/hooks/context/useTheme';
 import Block from './Block';
 import TextField from './Inputs_NEW/Text/TextField';
 import Modal from './Modal';
-import SpeedRunForm from './SpeedrunForm';
+import SplitForm from './SplitForm';
 import Text from './Text';
 
-type SpeedRunFormProps = {
+type AddSplitProps = {
   showModal: boolean,
   onClose: any,
-  title: string,
-  speedRun?: any,
+  split?: any,
   userData: any,
   revalidateCache: any,
+  selectedRun: any,
 };
 
-const AddSpeedrunModal = ({
+const AddSplitModal = ({
   showModal,
   onClose,
-  title,
-  speedRun,
+  split,
   userData,
   revalidateCache,
-}: SpeedRunFormProps) => {
+  selectedRun
+}: AddSplitProps) => {
   const { sizes, colors } = useTheme();
 
   return (
     <Modal visible={showModal} onClose={onClose}>
-      <SpeedRunForm
+      <SplitForm
         userData={userData}
         onCloseForm={onClose}
-        title={title}
-        speedRun={speedRun}
+        split={split}
         revalidateCache={revalidateCache}
+        selectedRun={selectedRun}
       />
     </Modal>
   );
 };
 
-export default AddSpeedrunModal;
+export default AddSplitModal;
