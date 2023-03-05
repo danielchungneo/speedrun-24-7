@@ -8,4 +8,5 @@ module.exports = {
   singleQuote: true,
   quoteProps: "as-needed",
   parser: "flow",
+  endOfLine: "auto"
 };
